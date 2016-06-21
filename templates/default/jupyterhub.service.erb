@@ -1,0 +1,14 @@
+[Unit]
+Description=Jupyterhub
+After=syslog.target network.target
+
+[Service]
+User=root
+<% if node['jupyterhub']['use_ssl'] -%>
+ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['app_dir'] %>/jupyterhub_config.py
+<% else %>
+ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['app_dir'] %>/jupyterhub_config.py --no-ssl
+<% end -%>
+
+[Install]
+WantedBy=multi-user.target
