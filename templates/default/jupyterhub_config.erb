@@ -1,43 +1,40 @@
 # jupyterhub_config.py
 c = get_config()
 
-import os
-pjoin = os.path.join
+## File to write PID Useful for daemonizing jupyterhub.
+c.JupyterHub.pid_file = '<%= node['jupyterhub']['config']['pid_file'] %>'
 
-runtime_dir = os.path.join('<%= node['jupyterhub']['runtime_dir'] %>')
-
-<% if node['jupyterhub']['use_ssl'] -%>
-# https
-c.JupyterHub.port = <%= node['jupyterhub']['https_port'] %>
-c.JupyterHub.ssl_key = '<%= node['jupyterhub']['ssl_key'] %>'
-c.JupyterHub.ssl_cert = '<%= node['jupyterhub']['ssl_cert'] %>'
-<% else %>
-# http
-c.JupyterHub.port = <%= node['jupyterhub']['http_port'] %>
+<% if node['jupyterhub']['config']['use_ssl'] -%>
+# https on :<%= node['jupyterhub']['config']['https_port'] %>
+c.JupyterHub.port = <%= node['jupyterhub']['config']['https_port'] %>
+c.JupyterHub.ssl_key = '<%= node['jupyterhub']['config']['jupyterhub_config']['ssl_key'] %>'
+c.JupyterHub.ssl_cert = '<%= node['jupyterhub']['config']['jupyterhub_config']['ssl_cert'] %>'
+<% else -%>
+# http on :<%= node['jupyterhub']['config']['http_port'] %>
+c.JupyterHub.port = <%= node['jupyterhub']['config']['http_port'] %>
 <% end -%>
 
 # put the JupyterHub cookie secret and state db
-# in /srv/jupyterhub
-c.JupyterHub.cookie_secret_file = pjoin(runtime_dir, 'cookie_secret')
-c.JupyterHub.db_url = pjoin(runtime_dir, 'jupyterhub.sqlite')
+# in <%= node['jupyterhub']['config']['runtime_dir'] %>
+c.JupyterHub.cookie_secret_file = '<%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_cookie_secret'
+c.JupyterHub.db_url = '<%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub.sqlite'
 # or `--db=/path/to/jupyterhub.sqlite` on the command-line
 
 # put the log file in /var/log
-c.JupyterHub.extra_log_file = '<%= node['jupyterhub']['log_dir']%>/jupyterhub.log'
+c.JupyterHub.extra_log_file = '<%= node['jupyterhub']['config']['log_dir'] %>/jupyterhub.log'
+
+# use PAM Authenticator for local users
+c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
 
 # create system users that don't exist yet
-c.LocalAuthenticator.create_system_users = <%= node['jupyterhub']['create_system_users'] %>
+c.LocalAuthenticator.create_system_users = <%= node['jupyterhub']['config']['jupyterhub_config']['create_system_users'] %>
 
 # specify users and admin
-<% unless node['jupyterhub']['users'].empty? -%>
-c.Authenticator.whitelist = {<%= node['jupyterhub']['users'].map { |u| "'" + u.to_s + "'" }.join(", ") %>}
-<% end -%>
-<% unless node['jupyterhub']['admins'].empty? -%>
-c.Authenticator.admin_users = {<%= node['jupyterhub']['admins'].map { |a| "'" + a.to_s + "'" }.join(", ") %>}
-<% end -%>
+c.Authenticator.whitelist = set(<%= node['jupyterhub']['config']['jupyterhub_config']['users'].map { |u| "'" + u.to_s + "'" }.join(", ") %>)
+c.Authenticator.admin_users = set(<%= node['jupyterhub']['config']['jupyterhub_config']['admins'].map { |a| "'" + a.to_s + "'" }.join(", ") %>)
 
 # start single-user notebook servers in ~/notebooks,
-# with ~/notebooks/Welcome.ipynb as the default landing page
 # this config could also be put in
 # /etc/ipython/ipython_notebook_config.py
+c.Spawner.cmd = ['jupyterhub-singleuser']
 c.Spawner.notebook_dir = '~/notebooks'
