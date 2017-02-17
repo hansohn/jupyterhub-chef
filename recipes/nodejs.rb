@@ -4,29 +4,25 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-include_recipe 'build-essential'
 
+# install node
 bash 'install_nodejs' do
   code <<-EOF
     curl --silent --location https://rpm.nodesource.com/setup_#{node['node']['version']} | bash -
     yum install -y nodejs
-    EOF
+  EOF
 end
 
+# install global npms
 node['node']['global_npms'].each do |g_npm|
   bash "install_#{g_npm}" do
-    code <<-EOF
-      source "#{node['nvm']['dir']}/nvm.sh"
-      npm install -g #{g_npm}
-      EOF
+    code "npm install -g #{g_npm}"
   end
 end unless node['node']['global_npms'].empty?
 
+# install non-global npms
 node['node']['npms'].each do |npm|
   bash "install_#{npm}" do
-    code <<-EOF
-      source "#{node['nvm']['dir']}/nvm.sh"
-      npm install #{npm}
-      EOF
+    code "npm install #{npm}"
   end
 end unless node['node']['npms'].empty?

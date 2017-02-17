@@ -7,7 +7,7 @@
 package [ 'openssl' ]
 
 directory 'create_log_dir' do
-  path node['jupyterhub']['log_dir']
+  path node['jupyterhub']['config']['log_dir']
   owner 'root'
   group 'root'
   mode '0644'
@@ -15,15 +15,7 @@ directory 'create_log_dir' do
 end
 
 directory 'create_runtime_dir' do
-  path node['jupyterhub']['runtime_dir']
-  owner 'root'
-  group 'root'
-  mode '0644'
-  action :create
-end
-
-directory 'create_config_dir' do
-  path node['jupyterhub']['config_dir']
+  path node['jupyterhub']['config']['runtime_dir']
   owner 'root'
   group 'root'
   mode '0644'
@@ -31,12 +23,12 @@ directory 'create_config_dir' do
 end
 
 bash 'inject_cookie_secret' do
-  code "openssl rand -base64 2048 > #{node['jupyterhub']['runtime_dir']}/cookie_secret"
+  code "openssl rand -base64 2048 > #{node['jupyterhub']['config']['runtime_dir']}/jupyterhub_cookie_secret"
   action :nothing
 end
 
 file 'create_cookie_secret_file' do
-  path "#{node['jupyterhub']['runtime_dir']}/cookie_secret"
+  path "#{node['jupyterhub']['config']['runtime_dir']}/jupyterhub_cookie_secret"
   owner 'root'
   group 'root'
   mode '0600'
