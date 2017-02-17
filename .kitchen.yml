@@ -1,22 +1,34 @@
 ---
 driver:
   name: vagrant
-  customize:
-    natdnshostresolver1: "on"
-  network:
-    - ["forwarded_port", {guest: 8000, host: 8000, auto_correct: true}]
-    - ["forwarded_port", {guest: 443, host: 8443, auto_correct: true}]
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.11.18
+  always_update_cookbooks: true
+  require_chef_omnibus: 12.16.42
+
+verifier:
+  name: inspec
 
 platforms:
-  - name: centos-7.2
+  - name: centos-7.3
 
 suites:
   - name: default
+    driver:
+      vm_hostname: jupyterhub
+      customize:
+        memory: 2048
+        cpuexecutioncap: 25
+        natdnshostresolver1: "on"
+      network:
+        - ["forwarded_port", {guest: 8000, host: 8000, auto_correct: true}]  # jupyterhub http
+        - ["forwarded_port", {guest: 8443, host: 8443, auto_correct: true}]  # jupyterhub https
+        - ["forwarded_port", {guest: 8081, host: 8081, auto_correct: true}]  # jupyterhub reast api
     run_list:
       - recipe[jupyterhub-chef::default]
+    verifier:
+      inspec_tests:
+        - test/recipes
     attributes:
       dev_mode: true

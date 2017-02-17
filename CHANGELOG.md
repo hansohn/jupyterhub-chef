@@ -6,13 +6,24 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - no new features in development at this time
 
-## [0.1.1](https://github.com/audio4ears/jupyterhub-chef/compare/v0.1.0...v0.1.1) (Jun 20, 2016)
+## [1.0.0](https://github.com/audio4ears/jupyterhub-chef/compare/0.1.1...1.0.0) (Feb 17, 2017)
+
+BREAKING CHANGES:
+
+- restructure attributes
+
+FEATURES:
+
+- download node directly instead of using nvm
+- upgrade default node version to current 6.x
+
+## [0.1.1](https://github.com/audio4ears/jupyterhub-chef/compare/0.1.0...0.1.1) (Jun 20, 2016)
 
 BUGFIXES:
 
 - fix initial commit git issue
 
-## [0.1.0](https://github.com/audio4ears/jupyterhub-chef/compare/v0.1.0...v0.1.0) (Jun 20, 2016)
+## [0.1.0](https://github.com/audio4ears/jupyterhub-chef/compare/0.1.0...0.1.0) (Jun 20, 2016)
 
 FEATURES:
 
