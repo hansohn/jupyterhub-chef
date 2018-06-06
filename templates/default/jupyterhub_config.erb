@@ -1,40 +1,71 @@
-# jupyterhub_config.py
+# Produced by Chef -- changes will be overwritten
+# Configuration file for jupyterhub.
 c = get_config()
 
 ## File to write PID Useful for daemonizing jupyterhub.
 c.JupyterHub.pid_file = '<%= node['jupyterhub']['config']['pid_file'] %>'
 
-<% if node['jupyterhub']['config']['use_ssl'] -%>
-# https on :<%= node['jupyterhub']['config']['https_port'] %>
-c.JupyterHub.port = <%= node['jupyterhub']['config']['https_port'] %>
-c.JupyterHub.ssl_key = '<%= node['jupyterhub']['config']['jupyterhub_config']['ssl_key'] %>'
-c.JupyterHub.ssl_cert = '<%= node['jupyterhub']['config']['jupyterhub_config']['ssl_cert'] %>'
+## The public facing network settings of the whole application (the proxy)
+c.JupyterHub.ip = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ip'] %>'
+<% if node['jupyterhub']['config']['enable_ssl'] -%>
+c.JupyterHub.port = <%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_port'] %>
+c.JupyterHub.ssl_key = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_key'] %>'
+c.JupyterHub.ssl_cert = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_cert'] %>'
 <% else -%>
-# http on :<%= node['jupyterhub']['config']['http_port'] %>
-c.JupyterHub.port = <%= node['jupyterhub']['config']['http_port'] %>
+c.JupyterHub.port = <%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.port'] %>
 <% end -%>
+
+# the network settings for the proxy API handlers
+c.JupyterHub.proxy_api_ip = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_ip'] %>'
+c.JupyterHub.proxy_api_port = <%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_port'] %>
+
+# set network settings for the jupyterhub process
+c.JupyterHub.hub_ip = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.hub_ip'] %>'
+c.JupyterHub.hub_port = <%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.hub_port'] %>
 
 # put the JupyterHub cookie secret and state db
 # in <%= node['jupyterhub']['config']['runtime_dir'] %>
 c.JupyterHub.cookie_secret_file = '<%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_cookie_secret'
+
+# specify db connection
+<% if defined?(node['jupyterhub']['db']['type']) and node['jupyterhub']['db']['type'] == 'postgresql' -%>
+c.JupyterHub.db_url = 'postgresql://<%= node['jupyterhub']['db']['user'] %>:<%= node['jupyterhub']['db']['pass'] %>@<%= node['jupyterhub']['db']['host'] %>:<%= node['jupyterhub']['db']['port'] %>/<%= node['jupyterhub']['db']['name'] %>'
+<% else -%>
 c.JupyterHub.db_url = '<%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub.sqlite'
 # or `--db=/path/to/jupyterhub.sqlite` on the command-line
+<% end -%>
 
 # put the log file in /var/log
 c.JupyterHub.extra_log_file = '<%= node['jupyterhub']['config']['log_dir'] %>/jupyterhub.log'
 
-# use PAM Authenticator for local users
-c.JupyterHub.authenticator_class = 'jupyterhub.auth.PAMAuthenticator'
+<% if node['jupyterhub']['config']['enable_ldap'] -%>
+# use LDAP Authenticator for user authentication
+c.JupyterHub.authenticator_class = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_ldap_class'] %>'
 
-# create system users that don't exist yet
-c.LocalAuthenticator.create_system_users = <%= node['jupyterhub']['config']['jupyterhub_config']['create_system_users'] %>
+# specify LDAP connection config
+c.LDAPAuthenticator.server_hosts = <%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.server_hosts'] %>
+c.LDAPAuthenticator.bind_user_dn = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.bind_user_dn'] %>'
+c.LDAPAuthenticator.bind_user_password = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.bind_user_pass'] %>'
+c.LDAPAuthenticator.user_search_base = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_search_base'] %>'
+c.LDAPAuthenticator.user_search_filter = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_search_filter'] %>'
+c.LDAPAuthenticator.user_membership_attribute = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_membership_attribute'] %>'
+c.LDAPAuthenticator.group_search_base = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.group_search_base'] %>'
+c.LDAPAuthenticator.group_search_filter = '<%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.group_search_filter'] %>'
+c.LDAPAuthenticator.allowed_groups = <%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allowed_groups'] %>
+c.LDAPAuthenticator.allow_nested_groups = <%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allow_nested_groups'] %>
+c.LDAPAuthenticator.create_user_home_dir = <%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir'] %>
+c.LDAPAuthenticator.create_user_home_dir_cmd = <%= node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir_cmd'] %>
+<% else -%>
+# use PAM Authenticator for local users
+c.JupyterHub.authenticator_class = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_class'] %>'
+<% end -%>
 
 # specify users and admin
-c.Authenticator.whitelist = set(<%= node['jupyterhub']['config']['jupyterhub_config']['users'].map { |u| "'" + u.to_s + "'" }.join(", ") %>)
-c.Authenticator.admin_users = set(<%= node['jupyterhub']['config']['jupyterhub_config']['admins'].map { |a| "'" + a.to_s + "'" }.join(", ") %>)
+c.Authenticator.whitelist = set(<%= node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'].map { |w| "'" + w.to_s + "'" }.join(", ") %>)
+c.Authenticator.admin_users = set(<%= node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'].map { |a| "'" + a.to_s + "'" }.join(", ") %>)
 
-# start single-user notebook servers in ~/notebooks,
+# start single-user notebook servers in <%= node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] %>,
 # this config could also be put in
 # /etc/ipython/ipython_notebook_config.py
-c.Spawner.cmd = ['jupyterhub-singleuser']
-c.Spawner.notebook_dir = '~/notebooks'
+c.Spawner.cmd = ['<%= node['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] %>']
+c.Spawner.notebook_dir = '<%= node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] %>'

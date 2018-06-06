@@ -5,10 +5,6 @@
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
 
-#include package(s)
-package [ 'git' ]
-
-# create jupyterhub user/group
 if node['jupyterhub']['config']['run_as'] != 'root'
   # create jupyterhub group
   group 'create_jupyterhub_group' do
@@ -26,30 +22,64 @@ if node['jupyterhub']['config']['run_as'] != 'root'
     group       node['jupyterhub']['group']['name']
     action      :create
   end
+
+  # create jupyterhub root app_dir
+  directory "create_#{node['jupyterhub']['config']['app_dir']}" do
+    path node['jupyterhub']['config']['app_dir']
+    owner node['jupyterhub']['user']['name']
+    group node['jupyterhub']['group']['name']
+    mode '0755'
+  end
+else
+  # create jupyterhub root app_dir
+  directory "create_#{node['jupyterhub']['config']['app_dir']}" do
+    path node['jupyterhub']['config']['app_dir']
+    owner 'root'
+    group 'root'
+    mode '0755'
+  end
 end
 
 # install jupyterhub
-bash 'install_jupyterhub' do
-  code <<-EOF
-    pip3 install -r dev-requirements.txt -e .
-    npm install
-  EOF
-  cwd node['jupyterhub']['config']['app_dir']
-  action :nothing
-end
+case node['jupyterhub']['install_from']
+when 'python'
+  # install jupyterhub via python
+  node['jupyterhub']['python3']['pips'].each do |pip|
+    bash "install_pip3_#{pip}" do
+      code "python3 -m pip install -U #{pip}"
+    end
+  end unless node['jupyterhub']['python3']['pips'].empty?
+when 'git'
+  # include package(s)
+  package [ 'git' ]
 
-# install sudospawner
-bash 'install_sudospawner' do
-  code 'sudo pip install git+https://github.com/jupyter/sudospawner'
-  cwd node['jupyterhub']['config']['app_dir']
-  action :nothing
-end
+  # compile jupyterhub
+  bash 'install_jupyterhub' do
+    code <<-EOF
+      npm install
+      ./bower-lite
+      python3 -m pip install 'jupyter-client>=5.2.0'
+      python3 -m pip install -r dev-requirements.txt -e .
+    EOF
+    cwd "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['git']['revision']}"
+    user 'root'
+    action :nothing
+  end
 
-# download jupyterhub
-git 'download_jupyterhub' do
-  repository node['jupyterhub']['git']['repo']
-  revision node['jupyterhub']['git']['revision']
-  destination node['jupyterhub']['config']['app_dir']
-  action :sync
-  notifies :run, 'bash[install_jupyterhub]', :immediately
+  # symlink jupyterhub
+  link "symlink_#{node['jupyterhub']['config']['app_dir']}/current" do
+    target_file "#{node['jupyterhub']['config']['app_dir']}/current"
+    to "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['git']['revision']}"
+    action :nothing
+  end
+
+  # download jupyterhub
+  git 'download_jupyterhub' do
+    repository node['jupyterhub']['git']['repo']
+    revision node['jupyterhub']['git']['revision']
+    destination "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['git']['revision']}"
+    action :sync
+    notifies :run, 'bash[install_jupyterhub]', :immediately
+    notifies :create, "link[symlink_#{node['jupyterhub']['config']['app_dir']}/current]", :immediately
+  end
 end

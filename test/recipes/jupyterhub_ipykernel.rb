@@ -1,6 +1,6 @@
 # # encoding: utf-8
 
-# Inspec test for recipe jupyterhub-chef::jupyterhub_pyspark
+# Inspec test for recipe jupyterhub-chef::jupyterhub_ipykernel
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at https://docs.chef.io/inspec_reference.html

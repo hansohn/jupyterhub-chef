@@ -5,12 +5,20 @@ After=syslog.target network.target
 [Service]
 User=<%= node['jupyterhub']['config']['run_as'] %>
 PIDFile=<%= node['jupyterhub']['config']['pid_file'] %>
+<% if node['jupyterhub']['config']['run_as'] != 'root' -%>
 <% if node['jupyterhub']['config']['enable_ssl'] -%>
-ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['config']['app_dir'] %>/jupyterhub_config.py
+ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['config']['app_dir'] %>/current/jupyterhub_config.py
 <% else %>
-ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['config']['app_dir'] %>/jupyterhub_config.py --no-ssl
+ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['config']['app_dir'] %>/current/jupyterhub_config.py --no-ssl
 <% end -%>
-WorkingDirectory=<%= node['jupyterhub']['config']['app_dir'] %>
+WorkingDirectory=<%= node['jupyterhub']['config']['app_dir'] %>/current
+<% else -%>
+<% if node['jupyterhub']['config']['enable_ssl'] -%>
+ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_config.py
+<% else %>
+ExecStart=/usr/bin/jupyterhub -f <%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_config.py --no-ssl
+<% end -%>
+<% end -%>
 
 [Install]
 WantedBy=multi-user.target
