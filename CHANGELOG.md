@@ -6,19 +6,23 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - no new features in development at this time
 
-## [1.1.0](https://github.com/hansohn/jupyterhub-chef/compare/1.0.0...1.1.0) (Jun 06, 2018)
+## [2.0.0](https://github.com/hansohn/jupyterhub-chef/compare/1.0.0...2.0.0) (Jun 07, 2018)
+
+BREAKING CHANGES:
+
+- implement 'instal_from' and 'install_version' attributes to select how to install jupyterhub and which version to install
 
 FEATURES:
 
 - bump default jupyterhub version to 0.8.1
-- support jupyterhub installation from python or github
+- support jupyterhub installation from python or github. set pythont o default
 - add jupyterhub config parameters for LDAP integration
 - add jupyterhub config parameters for PostgreSQL integration
 - add Anaconda kernels to jupyterhub by default
 
 BUG FIXES:
 
-- remove 'c.LocalAuthenticator.create_system_users' parameter in config.
+- remove 'c.LocalAuthenticator.create_system_users' parameter in config. Doesn't work with our Auth Class
 
 ## [1.0.0](https://github.com/hansohn/jupyterhub-chef/compare/0.1.1...1.0.0) (Feb 17, 2017)
 

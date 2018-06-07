@@ -31,7 +31,7 @@ By default this cookbook installs JupyterHub version `0.8.1`, which at the time 
 
 ```ruby
 # jupyterhub
-node['jupyterhub']['install_from'] = 'git'
+node['jupyterhub']['install_from'] = 'python'
 node['jupyterhub']['install_version'] = '0.8.1'
 node['jupyterhub']['config']['run_as'] = 'root'
 node['jupyterhub']['config']['pid_file'] = '/var/run/jupyter.pid'
@@ -67,58 +67,99 @@ node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = [
 node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = []
 ```
 
+### LDAP Authentication
+
+To enable LDAP Authentication, define the following keys in your attributes file.
+
+```ruby
+# enable ldap
+node['jupyterhub']['config']['enable_ldap'] = true
+node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_ldap_class'] = 'ldapauthenticator.LDAPAuthenticator'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.server_hosts'] = ['ldaps://ldap1.example.com:636', 'ldaps://ldap2.example.com:636']
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.bind_user_dn'] = 'uid=imauser,cn=users,cn=accounts,dc=example,dc=com'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.bind_user_password'] = 'imapassword'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_search_base'] = 'cn=users,cn=accounts,dc=example,dc=com'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_search_filter'] = '(&(objectClass=person)(uid={username}))'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_membership_attribute'] = 'memberOf'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.group_search_base'] = 'cn=groups,cn=accounts,dc=example,dc=com'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.group_search_filter'] = '(&(objectClass=ipausergroup)(memberOf={group}))'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allowed_groups'] = ['cn=jupyterhub-users,cn=groups,cn=accounts,dc=example,dc=com']
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allow_nested_groups'] = 'True'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir'] = 'True'
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir_cmd'] = ['mkhomedir_helper']
+```
+
+### PostgreSQL Database
+
+By default Jupyterhub uses a [SQLite](https://www.sqlite.org/index.html) database. To use [PostgreSQL](https://www.postgresql.org/) instead, configure your postgresql server and then add the following keys to your attribute file. Replace values with those associated to your specific instance.
+
+```ruby
+node['jupyterhub']['db']['type'] = 'postgresql'
+node['jupyterhub']['db']['user'] = 'jupyterhub_db_user'
+node['jupyterhub']['db']['pass'] = 'jupyterhub_db_pass'
+node['jupyterhub']['db']['host'] = 'jupyterhub_db_server'
+node['jupyterhub']['db']['port'] = '5432'
+node['jupyterhub']['db']['name'] = 'jupyterhub_db_name'
+```
+
 ### Kernels
 
-The IPython kernel is the Python execution backend for Jupyter/JupyterHub. This cookbook includes 4 kernels by default, they are as follows:
+The [IPython](https://ipython.org/) kernel is the Python execution backend for Jupyter/JupyterHub. This cookbook includes 4 kernels by default, they are as follows:
 
 - python2: kernel running native python `2.7`
 - python3: kernel running native python `3.4`
 - anaconda2: kernel running python `2.7.14` and default anaconda packages
 - anaconda3: kernel running python `3.6.5` and default anaconda packages
 
-These kernels can be enabled/disabled as desired. The name, python version, and included pips can also be changed by modifying the following attributes.
+These kernels can be enabled/disabled as desired. The kernel name, python version, and included pips/condas can also be changed by modifying the following attributes.
 
 ```ruby
 # python2 kernel
-node['python']['python2']['ipykernel']['install'] = true
-node['python']['python2']['ipykernel']['kernel_name'] = 'python2'
-node['python']['python2']['ipykernel']['kernel_displayname'] = 'Python 2'
-node['python']['python2']['ipykernel']['python_version'] = 'python2'
-node['python']['python2']['ipykernel']['pips'] = ['ipykernel']
+node['jupyterhub']['kernels']['python2']['type'] = 'python'
+node['jupyterhub']['kernels']['python2']['install'] = true
+node['jupyterhub']['kernels']['python2']['kernel_name'] = 'python2'
+node['jupyterhub']['kernels']['python2']['kernel_displayname'] = 'Python 2'
+node['jupyterhub']['kernels']['python2']['python_version'] = 'python2'
+node['jupyterhub']['kernels']['python2']['pips'] = ['ipykernel']
 
 # python3 kernel
-node['python']['python3']['ipykernel']['install'] = true
-node['python']['python3']['ipykernel']['kernel_name'] = 'python3'
-node['python']['python3']['ipykernel']['kernel_displayname'] = 'Python 3'
-node['python']['python3']['ipykernel']['python_version'] = 'python3'
-node['python']['python3']['ipykernel']['pips'] = ['ipykernel']
+node['jupyterhub']['kernels']['python3']['type'] = 'python'
+node['jupyterhub']['kernels']['python3']['install'] = true
+node['jupyterhub']['kernels']['python3']['kernel_name'] = 'python3'
+node['jupyterhub']['kernels']['python3']['kernel_displayname'] = 'Python 3'
+node['jupyterhub']['kernels']['python3']['python_version'] = 'python3'
+node['jupyterhub']['kernels']['python3']['pips'] = ['ipykernel']
 
 # anaconda2 kernel
-node['anaconda']['python2']['ipykernel']['install'] = true
-node['anaconda']['python2']['ipykernel']['kernel_name'] = 'anaconda2'
-node['anaconda']['python2']['ipykernel']['kernel_displayname'] = 'Anaconda 2'
-node['anaconda']['python2']['ipykernel']['python_version'] = '2.7.14'
-node['anaconda']['python2']['ipykernel']['pips'] = ['ipykernel']
-node['anaconda']['python2']['ipykernel']['condas'] = []
+node['jupyterhub']['kernels']['anaconda2']['type'] = 'anaconda'
+node['jupyterhub']['kernels']['anaconda2']['install'] = true
+node['jupyterhub']['kernels']['anaconda2']['kernel_name'] = 'anaconda2'
+node['jupyterhub']['kernels']['anaconda2']['kernel_displayname'] = 'Anaconda 2'
+node['jupyterhub']['kernels']['anaconda2']['python_version'] = '2.7.14'
+node['jupyterhub']['kernels']['anaconda2']['pips'] = ['ipykernel']
+node['jupyterhub']['kernels']['anaconda2']['condas'] = []
 
 # anaconda3 kernel
-node['anaconda']['python3']['ipykernel']['install'] = true
-node['anaconda']['python3']['ipykernel']['kernel_name'] = 'anaconda3'
-node['anaconda']['python3']['ipykernel']['kernel_displayname'] = 'Anaconda 3'
-node['anaconda']['python3']['ipykernel']['python_version'] = '3.6.5'
-node['anaconda']['python3']['ipykernel']['pips'] = ['ipykernel']
-node['anaconda']['python3']['ipykernel']['condas'] = []
+node['jupyterhub']['kernels']['anaconda3']['type'] = 'anaconda'
+node['jupyterhub']['kernels']['anaconda3']['install'] = true
+node['jupyterhub']['kernels']['anaconda3']['kernel_name'] = 'anaconda3'
+node['jupyterhub']['kernels']['anaconda3']['kernel_displayname'] = 'Anaconda 3'
+node['jupyterhub']['kernels']['anaconda3']['python_version'] = '3.6.5'
+node['jupyterhub']['kernels']['anaconda3']['pips'] = ['ipykernel']
+node['jupyterhub']['kernels']['anaconda3']['condas'] = []
 ```
 
-To create your own custom user kernel with a pinned version of python and specific included packages run the following from your user shell. Replace `python-custom` with the desired name of your kernel.
+To create your own custom kernel with a pinned version of python and specific included packages include the following in your attributes file. Replace `python-custom` with the desired name of your kernel.
 
-```bash
-# custom kernel
-conda create -n python-custom python=3.6.5 anaconda -y
-conda activate python-custom
-python -m pip install ipykernel matplotlib pandas scikit-learn tensorflow
-python -m ipykernel install --user --name python-custom --display-name python-custom
-conda deactivate
+```ruby
+# custom anaconda kernel
+node['jupyterhub']['kernels']['python-custom']['type'] = 'anaconda'
+node['jupyterhub']['kernels']['python-custom']['install'] = true
+node['jupyterhub']['kernels']['python-custom']['kernel_name'] = 'python-custom'
+node['jupyterhub']['kernels']['python-custom']['kernel_displayname'] = 'Python Custom'
+node['jupyterhub']['kernels']['python-custom']['python_version'] = '3.6.5'
+node['jupyterhub']['kernels']['python-custom']['pips'] = ['ipykernel', 'matplotlib', 'pandas', 'scikit-learn', 'tensorflow']
+node['jupyterhub']['kernels']['python-custom']['condas'] = []
 ```
 
 ### Usage
