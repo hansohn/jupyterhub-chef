@@ -10,13 +10,13 @@ By default `Python2` and `Python34` are installed from system package repos. A d
 # python
 node['python']['python2']['install'] = true
 node['python']['python2']['package'] = 'python-devel'
-node['python']['python2']['pips'] = [ 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
+node['python']['python2']['pips'] = [ 'pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
 node['python']['python3']['install'] = true
 node['python']['python3']['package'] = 'python34-devel'
-node['python']['python3']['pips'] = [ 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
+node['python']['python3']['pips'] = [ 'pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
 ```
 
-The latest `6.x` version of `NodeJS` is also installed by default. A different version of NodeJS, or additional npms, can be specified for installation by overriding the following attributes.
+The current `6.x` version of `NodeJS` is installed by default. A different version of NodeJS, or additional npms, can be specified for installation by overriding the following attributes.
 
 ```ruby
 # node
