@@ -4,6 +4,6 @@ maintainer_email 'you@example.com'
 license 'all_rights'
 description 'Installs/Configures jupyterhub-chef'
 long_description 'Installs/Configures jupyterhub-chef'
-version '1.1.0'
+version '2.0.0'
 
 depends 'build-essential'
