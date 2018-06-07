@@ -10,6 +10,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 FEATURES:
 
+- bump default jupyterhub version to 0.8.1
+- support jupyterhub installation from python or github
+- add jupyterhub config parameters for LDAP integration
+- add jupyterhub config parameters for PostgreSQL integration
+- add Anaconda kernels to jupyterhub by default
+
+BUG FIXES:
+
+- remove 'c.LocalAuthenticator.create_system_users' parameter in config.
 
 ## [1.0.0](https://github.com/hansohn/jupyterhub-chef/compare/0.1.1...1.0.0) (Feb 17, 2017)
 
@@ -24,7 +33,7 @@ FEATURES:
 
 ## [0.1.1](https://github.com/hansohn/jupyterhub-chef/compare/0.1.0...0.1.1) (Jun 20, 2016)
 
-BUGFIXES:
+BUG FIXES:
 
 - fix initial commit git issue
 

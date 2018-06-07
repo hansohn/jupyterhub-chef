@@ -27,12 +27,12 @@ node['node']['global_npms'] = [ 'npm', 'configurable-http-proxy' ]
 
 ### Configuration
 
-By default this cookbook installs JupyterHub version `0.7.2`, which at the time of this writing, is the current version. Various changes can be made to JupyterHub's configuration by overriding the following attributes.
+By default this cookbook installs JupyterHub version `0.8.1`, which at the time of this writing, is the current version. Various changes can be made to JupyterHub's configuration by overriding the following attributes.
 
 ```ruby
 # jupyterhub
-node['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
-node['jupyterhub']['git']['revision'] = '0.7.2'
+node['jupyterhub']['install_from'] = 'git'
+node['jupyterhub']['install_version'] = '0.8.1'
 node['jupyterhub']['config']['run_as'] = 'root'
 node['jupyterhub']['config']['pid_file'] = '/var/run/jupyter.pid'
 node['jupyterhub']['config']['app_dir'] = '/opt/jupyterhub'
@@ -40,6 +40,7 @@ node['jupyterhub']['config']['runtime_dir'] = '/srv/jupyterhub'
 node['jupyterhub']['config']['log_dir'] = '/var/log/jupyterhub'
 node['jupyterhub']['config']['allow_parallel_computing'] = true
 node['jupyterhub']['config']['enable_ssl'] = false
+node['jupyterhub']['config']['enable_ldap'] = false
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ip'] = ''
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.port'] = '8000'
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_port'] = '8443'
@@ -52,7 +53,6 @@ node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_key'] = '/etc/
 node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = []
 node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = []
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_class'] = 'jupyterhub.auth.PAMAuthenticator'
-node['jupyterhub']['config']['jupyterhub_config']['LocalAuthenticator.create_system_users'] = 'False'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] = 'jupyterhub-singleuser'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] = '~/notebooks'
 ```
@@ -73,51 +73,57 @@ The IPython kernel is the Python execution backend for Jupyter/JupyterHub. This 
 
 - python2: kernel running native python `2.7`
 - python3: kernel running native python `3.4`
-- python2-conda: kernel running python `2.7.13` and default anaconda packages
-- python3-conda: kernel running python `3.6.0` and default anaconda packages
+- anaconda2: kernel running python `2.7.14` and default anaconda packages
+- anaconda3: kernel running python `3.6.5` and default anaconda packages
 
 These kernels can be enabled/disabled as desired. The name, python version, and included pips can also be changed by modifying the following attributes.
 
 ```ruby
 # python2 kernel
 node['python']['python2']['ipykernel']['install'] = true
-node['python']['python2']['ipykernel']['name'] = 'python2'
-node['python']['python2']['ipykernel']['version'] = 'python2'
+node['python']['python2']['ipykernel']['kernel_name'] = 'python2'
+node['python']['python2']['ipykernel']['kernel_displayname'] = 'Python 2'
+node['python']['python2']['ipykernel']['python_version'] = 'python2'
 node['python']['python2']['ipykernel']['pips'] = ['ipykernel']
 
 # python3 kernel
 node['python']['python3']['ipykernel']['install'] = true
-node['python']['python3']['ipykernel']['name'] = 'python3'
-node['python']['python3']['ipykernel']['version'] = 'python3'
+node['python']['python3']['ipykernel']['kernel_name'] = 'python3'
+node['python']['python3']['ipykernel']['kernel_displayname'] = 'Python 3'
+node['python']['python3']['ipykernel']['python_version'] = 'python3'
 node['python']['python3']['ipykernel']['pips'] = ['ipykernel']
 
-# python2-conda kernel
+# anaconda2 kernel
 node['anaconda']['python2']['ipykernel']['install'] = true
-node['anaconda']['python2']['ipykernel']['name'] = 'python2-conda'
-node['anaconda']['python2']['ipykernel']['version'] = '2.7.13'
+node['anaconda']['python2']['ipykernel']['kernel_name'] = 'anaconda2'
+node['anaconda']['python2']['ipykernel']['kernel_displayname'] = 'Anaconda 2'
+node['anaconda']['python2']['ipykernel']['python_version'] = '2.7.14'
 node['anaconda']['python2']['ipykernel']['pips'] = ['ipykernel']
+node['anaconda']['python2']['ipykernel']['condas'] = []
 
-# python3-conda kernel
+# anaconda3 kernel
 node['anaconda']['python3']['ipykernel']['install'] = true
-node['anaconda']['python3']['ipykernel']['name'] = 'python3-conda'
-node['anaconda']['python3']['ipykernel']['version'] = '3.6.0'
+node['anaconda']['python3']['ipykernel']['kernel_name'] = 'anaconda3'
+node['anaconda']['python3']['ipykernel']['kernel_displayname'] = 'Anaconda 3'
+node['anaconda']['python3']['ipykernel']['python_version'] = '3.6.5'
 node['anaconda']['python3']['ipykernel']['pips'] = ['ipykernel']
+node['anaconda']['python3']['ipykernel']['condas'] = []
 ```
 
 To create your own custom user kernel with a pinned version of python and specific included packages run the following from your user shell. Replace `python-custom` with the desired name of your kernel.
 
 ```bash
 # custom kernel
-conda create -n python-custom python=3.6.0 python anaconda -y
-source activate python-custom
+conda create -n python-custom python=3.6.5 anaconda -y
+conda activate python-custom
 python -m pip install ipykernel matplotlib pandas scikit-learn tensorflow
 python -m ipykernel install --user --name python-custom --display-name python-custom
-source deactivate
+conda deactivate
 ```
 
 ### Usage
 
-Once installed JupyterHub is available at http://127.0.0.1:8000 unless otherwise modified using the attributes referenced above. Before a user can log into JupyterHub he/she must create their notebooks directory at ~/notebooks. Failure to create this directory will result in 500 errors when logging in.
+Once installed JupyterHub is available at http://127.0.0.1:8000 unless otherwise modified using the attributes referenced above. Before a user can log into JupyterHub he/she must create their notebooks directory at `~/jupyterhub`. Failure to create this directory will result in 500 errors when logging in.
 
 ### Documentation
 
