@@ -61,7 +61,7 @@ when 'git'
       python3 -m pip install 'jupyter-client>=5.2.0'
       python3 -m pip install -r dev-requirements.txt -e .
     EOF
-    cwd "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['git']['revision']}"
+    cwd "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['install_version']}"
     user 'root'
     action :nothing
   end
@@ -69,15 +69,15 @@ when 'git'
   # symlink jupyterhub
   link "symlink_#{node['jupyterhub']['config']['app_dir']}/current" do
     target_file "#{node['jupyterhub']['config']['app_dir']}/current"
-    to "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['git']['revision']}"
+    to "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['install_version']}"
     action :nothing
   end
 
   # download jupyterhub
   git 'download_jupyterhub' do
     repository node['jupyterhub']['git']['repo']
-    revision node['jupyterhub']['git']['revision']
-    destination "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['git']['revision']}"
+    revision node['jupyterhub']['install_version']
+    destination "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['install_version']}"
     action :sync
     notifies :run, 'bash[install_jupyterhub]', :immediately
     notifies :create, "link[symlink_#{node['jupyterhub']['config']['app_dir']}/current]", :immediately

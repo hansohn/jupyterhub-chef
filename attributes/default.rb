@@ -23,15 +23,11 @@ default['python']['python3']['ipykernel']['pips'] = ['ipykernel']
 default['python']['virtualenv']['env_dir'] = '/opt/virtualenv'
 
 # jupyterhub attributes
-default['jupyterhub']['install_from'] = 'git'
+default['jupyterhub']['install_from'] = 'python'
 default['jupyterhub']['install_version'] = '0.8.1'
 case node['jupyterhub']['install_from']
 when 'git'
-  case node['jupyterhub']['install_version']
-  when '0.8.1'
-    default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
-    default['jupyterhub']['git']['revision'] = '0.8.1'
-  end
+  default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
 when 'python'
   case node['jupyterhub']['install_version']
   when '0.8.1'
@@ -47,6 +43,12 @@ default['jupyterhub']['user']['name'] = 'jupyterhub'
 default['jupyterhub']['user']['uid'] = 15000
 default['jupyterhub']['user']['home'] = '/home/jupyterhub'
 default['jupyterhub']['user']['shell'] = '/bin/bash'
+default['jupyterhub']['db']['type'] = 'sqlite'
+default['jupyterhub']['db']['user'] = 'jupyterhub_db_user'
+default['jupyterhub']['db']['pass'] = 'jupyterhub_db_pass'
+default['jupyterhub']['db']['host'] = 'jupyterhub_db_server'
+default['jupyterhub']['db']['port'] = '5432'
+default['jupyterhub']['db']['name'] = 'jupyterhub_db_name'
 default['jupyterhub']['config']['run_as'] = 'root'
 default['jupyterhub']['config']['pid_file'] = '/var/run/jupyter.pid'
 default['jupyterhub']['config']['app_dir'] = '/opt/jupyterhub'
