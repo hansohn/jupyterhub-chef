@@ -15,7 +15,7 @@ BREAKING CHANGES:
 FEATURES:
 
 - bump default jupyterhub version to 0.8.1
-- support jupyterhub installation from python or github. set pythont o default
+- support jupyterhub installation from python or github. set python as default
 - add jupyterhub config parameters for LDAP integration
 - add jupyterhub config parameters for PostgreSQL integration
 - add Anaconda kernels to jupyterhub by default
