@@ -4,10 +4,14 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+
 # include recipe(s)
+include_recipe 'build-essential'
+
+# include package(s)
 package [ 'curl', 'epel-release' ]
 
-
+# python2
 if node['python']['python2']['install']
   # install pip2
   bash 'install_pip2' do
@@ -29,6 +33,7 @@ if node['python']['python2']['install']
   end unless node['python']['python2']['pips'].empty?
 end
 
+# python3
 if node['python']['python3']['install']
   # install pip3
   bash 'install_pip3' do
