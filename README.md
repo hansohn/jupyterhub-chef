@@ -69,7 +69,7 @@ node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] =
 
 ### LDAP Authentication
 
-To enable LDAP Authentication, define the following keys in your attributes file.
+LDAP Authentication is not provided in Jupyterhub out of the box. This functionality is provided by the [jupyterhub-ldap-authenticator](https://github.com/hansohn/jupyterhub-ldap-authenticator) package which is installed by default with this cookbook. To utilize this package and enable LDAP Authentication, define the following keys in your attributes file.
 
 ```ruby
 # enable ldap
