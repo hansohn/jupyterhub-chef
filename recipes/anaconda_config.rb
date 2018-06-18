@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2017 The Authors, All Rights Reserved.
 
-
 # remove channels
 node['anaconda']['config']['channels']['remove'].each do |r|
   bash "conda_remove_channel_#{r}" do

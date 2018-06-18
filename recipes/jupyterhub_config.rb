@@ -1,12 +1,11 @@
-#
+
 # Cookbook Name:: jupyterhub-chef
 # Recipe:: jupyterhub_config
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-
 # include package(s)
-package [ 'openssl' ]
+package ['openssl']
 
 # create jupyterhub log dir
 directory 'create_log_dir' do
@@ -67,4 +66,3 @@ directory 'jupyterhub_/etc/skel/jupyterhub' do
   path '/etc/skel/jupyterhub'
   action :create
 end
-

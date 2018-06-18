@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-
 if node['jupyterhub']['config']['run_as'] != 'root'
   # create jupyterhub group
   group 'create_jupyterhub_group' do
@@ -51,7 +50,7 @@ when 'python'
   end unless node['jupyterhub']['python3']['pips'].empty?
 when 'git'
   # include package(s)
-  package [ 'git' ]
+  package ['git']
 
   # compile jupyterhub
   bash 'install_jupyterhub' do

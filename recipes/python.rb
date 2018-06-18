@@ -4,12 +4,11 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-
 # include recipe(s)
 include_recipe 'build-essential'
 
 # include package(s)
-package [ 'curl', 'epel-release' ]
+package ['curl', 'epel-release']
 
 # python2
 if node['python']['python2']['install']

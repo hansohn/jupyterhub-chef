@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2017 The Authors, All Rights Reserved.
 
-
 # create anaconda python2 ipykernel kernel
 if node['anaconda']['python2']['ipykernel']['install']
   bash "anaconda_create_#{node['anaconda']['python2']['ipykernel']['kernel_name']}_ipykernel" do

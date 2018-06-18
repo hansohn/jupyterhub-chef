@@ -1,0 +1,5 @@
+# Configuration parameters: SupportedStyles, MinSize, WordRegex.
+# SupportedStyles: percent, brackets
+Style/WordArray:
+  EnforcedStyle: brackets
+  Enabled: False

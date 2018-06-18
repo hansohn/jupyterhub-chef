@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2017 The Authors, All Rights Reserved.
 
-
 # enable ipython clusters tab in jupyterhub
 if node['jupyterhub']['config']['allow_parallel_computing']
   bash 'jupyterhub_enable_parallel_computing' do
