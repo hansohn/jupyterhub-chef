@@ -1,0 +1,42 @@
+---
+driver:
+  name: dokken
+  chef_version: latest
+  privileged: true
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  product_name: chef
+  product_version: latest
+  channel: stable
+  install_strategy: once
+  always_update_cookbooks: true
+  log_level: info
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7
+    driver:
+      platform: rhel
+      pid_one_command: /usr/lib/systemd/systemd
+      intermediate_instructions:
+        - RUN yum -y install lsof which systemd-sysv initscripts wget net-tools sudo bzip2
+
+suites:
+  - name: default
+    driver:
+      hostname: jupyterhub
+    run_list:
+      - recipe[jupyterhub-chef::python]
+      - recipe[jupyterhub-chef::nodejs]
+      - recipe[jupyterhub-chef::anaconda]
+      - recipe[jupyterhub-chef::jupyterhub]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
