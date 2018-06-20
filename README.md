@@ -1,5 +1,7 @@
 # jupyterhub-chef
 
+[![Build Status](https://travis-ci.org/hansohn/jupyterhub-chef.svg?branch=master)](https://travis-ci.org/hansohn/jupyterhub-chef) [![GitHub tag](https://img.shields.io/github/tag/hansohn/jupyterhub-chef.svg)](https://github.com/hansohn/jupyterhub-chef)
+
 This cookbook installs [JupyterHub](https://github.com/jupyterhub/jupyterhub) a multi-user Hub which spawns, manages, and proxies multiple instances of the single-user [Jupyter](http://jupyter.org/) notebook server.
 
 ### Prerequsites
