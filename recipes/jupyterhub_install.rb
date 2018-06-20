@@ -43,11 +43,9 @@ end
 case node['jupyterhub']['install_from']
 when 'python'
   # install jupyterhub via python
-  node['jupyterhub']['python3']['pips'].each do |pip|
-    bash "install_pip3_#{pip}" do
-      code "python3 -m pip install -U #{pip}"
-    end
-  end unless node['jupyterhub']['python3']['pips'].empty?
+  bash "install_jupyterhub_#{node['jupyterhub']['install_version']}" do
+    code "python3 -m pip install -U jupyterhub==#{node['jupyterhub']['install_version']}"
+  end
 when 'git'
   # include package(s)
   package ['git']

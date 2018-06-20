@@ -29,10 +29,7 @@ case node['jupyterhub']['install_from']
 when 'git'
   default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
 when 'python'
-  case node['jupyterhub']['install_version']
-  when '0.8.1'
-    default['jupyterhub']['python3']['pips'] = ['jupyterhub==0.8.1']
-  end
+  default['jupyterhub']['python3']['pips'] = ['']
 end
 default['jupyterhub']['addons']['pips'] = ['jupyterhub-ldap-authenticator']
 default['jupyterhub']['addons']['condas'] = ['']
