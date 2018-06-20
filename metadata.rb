@@ -10,5 +10,3 @@ source_url 'https://github.com/hansohn/jupyterhub-chef' if respond_to?(:source_u
 issues_url 'https://github.com/hansohn/jupyterhub-chef/issues' if respond_to?(:issues_url)
 
 supports 'centos', '>= 7.0'
-
-depends 'build-essential'

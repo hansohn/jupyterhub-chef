@@ -4,9 +4,6 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-# include recipe(s)
-include_recipe 'build-essential'
-
 # include package(s)
 package ['curl', 'epel-release']
 
