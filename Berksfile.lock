@@ -4,4 +4,4 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  jupyterhub-chef (0.2.0)
+  jupyterhub-chef (2.1.0)
