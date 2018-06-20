@@ -7,6 +7,11 @@
 # include package(s)
 package ['curl', 'epel-release']
 
+# include build essentials
+build_essential 'install_build_essential' do
+  action :install
+end
+
 # python2
 if node['python']['python2']['install']
   # install pip2

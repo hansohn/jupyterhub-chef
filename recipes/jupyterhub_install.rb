@@ -52,11 +52,6 @@ when 'git'
   # include package(s)
   package ['git']
 
-  # include build essentials
-  build_essential 'install_build_essential' do
-    action :install
-  end
-
   # compile jupyterhub
   bash 'install_jupyterhub' do
     code <<-EOF
