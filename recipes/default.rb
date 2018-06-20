@@ -4,15 +4,26 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-# install jupyterhub prerequsites
-include_recipe "#{cookbook_name}::python"
-include_recipe "#{cookbook_name}::nodejs"
-include_recipe "#{cookbook_name}::anaconda_install"
-include_recipe "#{cookbook_name}::anaconda_config"
+# these aren't the droids you're looking for
 
-# install jupyterhub
-include_recipe "#{cookbook_name}::jupyterhub_install"
-include_recipe "#{cookbook_name}::jupyterhub_config"
-include_recipe "#{cookbook_name}::jupyterhub_parallel"
-include_recipe "#{cookbook_name}::jupyterhub_service"
-include_recipe "#{cookbook_name}::jupyterhub_ipykernel"
+#                     _____
+#                _.-''     ``-._
+#              ,'               `.
+#             /                   \
+#            /                     \
+#           :                       :
+#           |_______________________|
+#           ;_______________________:
+#          / |       ,'   `.       | \
+#          : `.___.-'  ___  `-.___.' :
+#          \/`._   _,-'   `-._   _,'\/
+#          ,\.-'      _.-._      `-./.
+#        ,'        _,' ___ `._        `.
+#        | :.    ,'_,-' . `-._`-.   .: |
+#        | ':.  '-'     |     `-'  .:' |
+#        :  ':.         |         .:'  ;
+#         \  ,-         |         -.  /
+#          \'    \      '      /    `/
+#           \    ,`   ,'^`.   '.    /
+#            \  ( O`-','-'.`-'O )  /
+#             `-.___,'     `.___.-'
