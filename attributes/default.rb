@@ -1,12 +1,12 @@
 # node attributes
-default['node']['version'] = '6.x'
-default['node']['npms'] = []
-default['node']['global_npms'] = [ 'npm', 'configurable-http-proxy' ]
+default['nodejs']['version'] = '6.x'
+default['nodejs']['npms'] = []
+default['nodejs']['global_npms'] = ['npm', 'configurable-http-proxy']
 
 # python attributes
 default['python']['python2']['install'] = true
 default['python']['python2']['package'] = 'python-devel'
-default['python']['python2']['pips'] = [ 'pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
+default['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 default['python']['python2']['ipykernel']['install'] = false
 default['python']['python2']['ipykernel']['python_version'] = 'python2'
 default['python']['python2']['ipykernel']['kernel_name'] = 'python2'
@@ -14,7 +14,7 @@ default['python']['python2']['ipykernel']['kernel_displayname'] = 'Python 2'
 default['python']['python2']['ipykernel']['pips'] = ['ipykernel']
 default['python']['python3']['install'] = true
 default['python']['python3']['package'] = 'python34-devel'
-default['python']['python3']['pips'] = [ 'pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
+default['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 default['python']['python3']['ipykernel']['install'] = false
 default['python']['python3']['ipykernel']['python_version'] = 'python3'
 default['python']['python3']['ipykernel']['kernel_name'] = 'python3'
@@ -29,10 +29,7 @@ case node['jupyterhub']['install_from']
 when 'git'
   default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
 when 'python'
-  case node['jupyterhub']['install_version']
-  when '0.8.1'
-    default['jupyterhub']['python3']['pips'] = [ 'jupyterhub==0.8.1' ]
-  end
+  default['jupyterhub']['python3']['pips'] = ['']
 end
 default['jupyterhub']['addons']['pips'] = ['jupyterhub-ldap-authenticator']
 default['jupyterhub']['addons']['condas'] = ['']
@@ -63,7 +60,7 @@ default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_port'] = '8
 default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.hub_ip'] = '127.0.0.1'
 default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.hub_port'] = '8081'
 default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_ip'] = '127.0.0.1'
-default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_port'] = '8001' 
+default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_port'] = '8001'
 default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_cert'] = '/etc/ssl/certs/jupyterhub.crt'
 default['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_key'] = '/etc/ssl/private/jupyterhub.key'
 default['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = []

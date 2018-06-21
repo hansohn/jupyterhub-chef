@@ -21,5 +21,5 @@ end
 
 service 'start_jupyterhub' do
   service_name 'jupyterhub.service'
-  action [ :enable, :start ]
+  action [:enable, :start]
 end

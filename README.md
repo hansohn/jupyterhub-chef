@@ -1,5 +1,7 @@
 # jupyterhub-chef
 
+[![Build Status](https://travis-ci.org/hansohn/jupyterhub-chef.svg?branch=master)](https://travis-ci.org/hansohn/jupyterhub-chef) [![GitHub tag](https://img.shields.io/github/tag/hansohn/jupyterhub-chef.svg)](https://github.com/hansohn/jupyterhub-chef)
+
 This cookbook installs [JupyterHub](https://github.com/jupyterhub/jupyterhub) a multi-user Hub which spawns, manages, and proxies multiple instances of the single-user [Jupyter](http://jupyter.org/) notebook server.
 
 ### Prerequsites
@@ -10,10 +12,10 @@ By default `Python2` and `Python34` are installed from system package repos. A d
 # python
 node['python']['python2']['install'] = true
 node['python']['python2']['package'] = 'python-devel'
-node['python']['python2']['pips'] = [ 'pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
+node['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 node['python']['python3']['install'] = true
 node['python']['python3']['package'] = 'python34-devel'
-node['python']['python3']['pips'] = [ 'pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel' ]
+node['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 ```
 
 The current `6.x` version of `NodeJS` is installed by default. A different version of NodeJS, or additional npms, can be specified for installation by overriding the following attributes.
@@ -22,7 +24,7 @@ The current `6.x` version of `NodeJS` is installed by default. A different versi
 # node
 node['node']['version'] = '6.x'
 node['node']['npms'] = []
-node['node']['global_npms'] = [ 'npm', 'configurable-http-proxy' ]
+node['node']['global_npms'] = ['npm', 'configurable-http-proxy']
 ```
 
 ### Configuration
@@ -69,7 +71,7 @@ node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] =
 
 ### LDAP Authentication
 
-To enable LDAP Authentication, define the following keys in your attributes file.
+LDAP Authentication is not provided in Jupyterhub out of the box. This functionality is provided by the [jupyterhub-ldap-authenticator](https://github.com/hansohn/jupyterhub-ldap-authenticator) package which is installed by default with this cookbook. To utilize this package and enable LDAP Authentication, define the following keys in your attributes file.
 
 ```ruby
 # enable ldap

@@ -1,3 +1,4 @@
+.vagrant
 *~
 *#
 .#*
@@ -7,15 +8,15 @@
 
 # Bundler
 Gemfile.lock
+gems.locked
 bin/*
 .bundle/*
 
-# Chef
-.delivery
-
-# Kitchen
+# test kitchen
 .kitchen/
 .kitchen.local.yml
 
-# Vagrant
-.vagrant
+# Chef
+Berksfile.lock
+.zero-knife.rb
+Policyfile.lock.json

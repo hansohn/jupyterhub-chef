@@ -1,4 +1,4 @@
-e MIT License (MIT)
+MIT License (MIT)
 
 Copyright ©️ 2015-2018 Ryan Hansohn
 

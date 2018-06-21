@@ -5,7 +5,7 @@
 # Copyright (c) 2017 The Authors, All Rights Reserved.
 
 # create jupyterhub ipykernel kernels
-node['jupyterhub']['kernels'].each do |kernel,config|
+node['jupyterhub']['kernels'].each do |kernel, config|
   if config['install']
     if config['type'] == 'python'
       # create python ipykernel kernel
