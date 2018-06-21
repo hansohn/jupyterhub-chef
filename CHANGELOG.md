@@ -12,7 +12,8 @@ FEATURES:
 
 - remove default recipe functionality
 - allow any version of jupyterhub to be installed via python or git
-- add travis ci testing
+- add inspec tests
+- add travis ci
 
 ## [2.0.0](https://github.com/hansohn/jupyterhub-chef/compare/1.0.0...2.0.0) (Jun 07, 2018)
 
