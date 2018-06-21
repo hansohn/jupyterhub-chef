@@ -5,14 +5,44 @@
 # The Inspec reference, with examples and extensive documentation, can be
 # found at https://docs.chef.io/inspec_reference.html
 
-unless os.windows?
-  describe user('root') do
-    it { should exist }
-    skip 'This is an example test, replace with your own test.'
-  end
-end
+control 'jupyterhub-chef::python' do
+  title 'Testing python installation'
 
-describe port(80) do
-  it { should_not be_listening }
-  skip 'This is an example test, replace with your own test.'
+  describe package('python-devel') do
+    it { should be_installed }
+  end
+
+  describe bash('python2 -m pip list') do
+    its('stdout') { should match /jupyter/ }
+    its('exit_status') { should eq 0 }
+  end
+
+  describe bash('python2 -m pip list') do
+    its('stdout') { should match /py4j/ }
+    its('exit_status') { should eq 0 }
+  end
+
+  describe bash('python2 -m pip list') do
+    its('stdout') { should match /ipyparallel/ }
+    its('exit_status') { should eq 0 }
+  end
+
+  describe package('python34-devel') do
+    it { should be_installed }
+  end
+
+  describe bash('python3 -m pip list') do
+    its('stdout') { should match /jupyter/ }
+    its('exit_status') { should eq 0 }
+  end
+
+  describe bash('python3 -m pip list') do
+    its('stdout') { should match /py4j/ }
+    its('exit_status') { should eq 0 }
+  end
+
+  describe bash('python3 -m pip list') do
+    its('stdout') { should match /ipyparallel/ }
+    its('exit_status') { should eq 0 }
+  end
 end

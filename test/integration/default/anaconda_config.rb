@@ -5,14 +5,10 @@
 # The Inspec reference, with examples and extensive documentation, can be
 # found at https://docs.chef.io/inspec_reference.html
 
-unless os.windows?
-  describe user('root') do
-    it { should exist }
-    skip 'This is an example test, replace with your own test.'
-  end
-end
+control 'jupyterhub-chef::anaconda_config' do
+  title 'Testing anaconda configuration'
 
-describe port(80) do
-  it { should_not be_listening }
-  skip 'This is an example test, replace with your own test.'
+  describe bash('source /etc/profile.d/conda.sh && conda config --show channels') do
+    its('stdout') { should match /conda-forge/ }
+  end
 end
