@@ -55,11 +55,14 @@ link 'set_anaconda_envs' do
   action :nothing
 end
 
+anaconda_source = -> { node['anaconda']['source'][node['anaconda']['version']]['url'] }
+anaconda_checksum = -> { node['anaconda']['source'][node['anaconda']['version']]['checksum'] }
+
 # download anaconda
 remote_file 'download_anaconda' do
   path "#{node['anaconda']['config']['app_dir']}/downloads/#{node['anaconda']['version']}-Linux-x86_64.sh"
-  source node['anaconda']['source']['url']
-  checksum node['anaconda']['source']['checksum']
+  source anaconda_source.call
+  checksum anaconda_checksum.call
   mode '0755'
   action :create_if_missing
   notifies :run, 'bash[install_anaconda]', :immediately
