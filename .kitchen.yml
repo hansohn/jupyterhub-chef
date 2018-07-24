@@ -39,3 +39,7 @@ suites:
         - test/integration/default
     attributes:
       dev_mode: true
+      jupyterhub:
+        config:
+          jupyterhub_config:
+            Spawner.notebook_dir: '~/'
