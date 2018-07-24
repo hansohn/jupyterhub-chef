@@ -25,12 +25,8 @@ default['python']['virtualenv']['env_dir'] = '/opt/virtualenv'
 # jupyterhub attributes
 default['jupyterhub']['install_from'] = 'python'
 default['jupyterhub']['install_version'] = '0.8.1'
-case node['jupyterhub']['install_from']
-when 'git'
-  default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
-when 'python'
-  default['jupyterhub']['python3']['pips'] = ['']
-end
+default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
+default['jupyterhub']['python3']['pips'] = ['']
 default['jupyterhub']['addons']['pips'] = ['jupyterhub-ldap-authenticator']
 default['jupyterhub']['addons']['condas'] = ['']
 default['jupyterhub']['addons']['nbextensions'] = ['']
@@ -95,7 +91,7 @@ default['jupyterhub']['kernels']['python3']['kernel_displayname'] = 'Python 3'
 default['jupyterhub']['kernels']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'ipykernel']
 default['jupyterhub']['kernels']['anaconda2']['type'] = 'anaconda'
 default['jupyterhub']['kernels']['anaconda2']['install'] = true
-default['jupyterhub']['kernels']['anaconda2']['python_version'] = '2.7.14'
+default['jupyterhub']['kernels']['anaconda2']['python_version'] = '2.7.15'
 default['jupyterhub']['kernels']['anaconda2']['kernel_name'] = 'anaconda2'
 default['jupyterhub']['kernels']['anaconda2']['kernel_displayname'] = 'Anaconda 2'
 default['jupyterhub']['kernels']['anaconda2']['pips'] = ['pip', 'setuptools', 'wheel', 'ipykernel']
@@ -109,20 +105,24 @@ default['jupyterhub']['kernels']['anaconda3']['pips'] = ['pip', 'setuptools', 'w
 default['jupyterhub']['kernels']['anaconda3']['condas'] = []
 
 # anaconda attributes
-default['anaconda']['version'] = 'Anaconda3-5.1.0'
-case node['anaconda']['version']
-when 'Anaconda2-5.1.0'
-  default['anaconda']['source']['url'] = 'https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh'
-  default['anaconda']['source']['checksum'] = '5f26ee92860d1dffdcd20910ff2cf75572c39d2892d365f4e867a611cca2af5b'
-when 'Anaconda3-5.1.0'
-  default['anaconda']['source']['url'] = 'https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh'
-  default['anaconda']['source']['checksum'] = '7e6785caad25e33930bc03fac4994a434a21bc8401817b7efa28f53619fa9c29'
-end
+default['anaconda']['version'] = 'Anaconda3-5.2.0'
+# Anaconda2-5.1.0
+default['anaconda']['source']['Anaconda2-5.1.0']['url'] = 'https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh'
+default['anaconda']['source']['Anaconda2-5.1.0']['checksum'] = '5f26ee92860d1dffdcd20910ff2cf75572c39d2892d365f4e867a611cca2af5b'
+# Anaconda2-5.2.0
+default['anaconda']['source']['Anaconda2-5.2.0']['url'] = 'https://repo.continuum.io/archive/Anaconda2-5.2.0-Linux-x86_64.sh'
+default['anaconda']['source']['Anaconda2-5.2.0']['checksum'] = 'cb0d7a08b0e2cec4372033d3269979b4e72e2353ffd1444f57cb38bc9621219f'
+# Anaconda3-5.1.0
+default['anaconda']['source']['Anaconda3-5.1.0']['url'] = 'https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh'
+default['anaconda']['source']['Anaconda3-5.1.0']['checksum'] = '7e6785caad25e33930bc03fac4994a434a21bc8401817b7efa28f53619fa9c29'
+# Anaconda3-5.2.0
+default['anaconda']['source']['Anaconda3-5.2.0']['url'] = 'https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh'
+default['anaconda']['source']['Anaconda3-5.2.0']['checksum'] = '09f53738b0cd3bb96f5b1bac488e5528df9906be2480fe61df40e0e0d19e3d48'
 default['anaconda']['config']['app_dir'] = '/opt/anaconda'
 default['anaconda']['config']['channels']['add'] = ['conda-forge']
 default['anaconda']['config']['channels']['remove'] = []
 default['anaconda']['python2']['ipykernel']['install'] = false
-default['anaconda']['python2']['ipykernel']['python_version'] = '2.7.14'
+default['anaconda']['python2']['ipykernel']['python_version'] = '2.7.15'
 default['anaconda']['python2']['ipykernel']['kernel_name'] = 'anaconda2'
 default['anaconda']['python2']['ipykernel']['kernel_displayname'] = 'Anaconda 2'
 default['anaconda']['python2']['ipykernel']['pips'] = ['ipykernel']

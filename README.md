@@ -110,7 +110,7 @@ The [IPython](https://ipython.org/) kernel is the Python execution backend for J
 
 - python2: kernel running native python `2.7`
 - python3: kernel running native python `3.4`
-- anaconda2: kernel running python `2.7.14` and default anaconda packages
+- anaconda2: kernel running python `2.7.15` and default anaconda packages
 - anaconda3: kernel running python `3.6.5` and default anaconda packages
 
 These kernels can be enabled/disabled as desired. The kernel name, python version, and included pips/condas can also be changed by modifying the following attributes.
@@ -137,7 +137,7 @@ node['jupyterhub']['kernels']['anaconda2']['type'] = 'anaconda'
 node['jupyterhub']['kernels']['anaconda2']['install'] = true
 node['jupyterhub']['kernels']['anaconda2']['kernel_name'] = 'anaconda2'
 node['jupyterhub']['kernels']['anaconda2']['kernel_displayname'] = 'Anaconda 2'
-node['jupyterhub']['kernels']['anaconda2']['python_version'] = '2.7.14'
+node['jupyterhub']['kernels']['anaconda2']['python_version'] = '2.7.15'
 node['jupyterhub']['kernels']['anaconda2']['pips'] = ['ipykernel']
 node['jupyterhub']['kernels']['anaconda2']['condas'] = []
 
