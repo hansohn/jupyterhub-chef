@@ -11,6 +11,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 FEATURES:
 
 - update license
+- bump anaconda version to Anaconda3-5.2.0
+- bump anaconda2 kernel to python 2.7.15
+
+BUG FIXES:
+
+- resolve issue where anaconda version attribute is not intrepreted correctly when defined externally
 
 ## [2.1.0](https://github.com/hansohn/jupyterhub-chef/compare/2.0.0...2.1.0) (Jun 20, 2018)
 
