@@ -27,7 +27,7 @@ control 'jupyterhub-chef::python' do
     its('exit_status') { should eq 0 }
   end
 
-  describe package('python34-devel') do
+  describe package('python36-devel') do
     it { should be_installed }
   end
 

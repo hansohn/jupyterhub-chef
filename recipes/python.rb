@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 # include package(s)
-package ['curl', 'epel-release']
+package ['curl']
 
 # include build essentials
 build_essential 'install_build_essential' do
@@ -36,8 +36,15 @@ end
 if node['python']['python2']['install']
   # install pip2
   bash 'install_pip2' do
-    code 'curl https://bootstrap.pypa.io/get-pip.py | python2'
+    code "curl https://bootstrap.pypa.io/get-pip.py | #{node['python']['python2']['bin']}"
     action :nothing
+  end
+
+  # install python2 prerequisites
+  if node['python']['python2']['prerequisites'].any?
+    bash 'install_python2_prerequisites' do
+      code "yum install -y #{node['python']['python2']['prerequisites'].join(' ')}"
+    end
   end
 
   # install python2
@@ -45,6 +52,16 @@ if node['python']['python2']['install']
     package_name node['python']['python2']['package']
     notifies :run, 'bash[install_pip2]', :immediately
   end
+
+  # set alternatives
+  node['python']['python2']['alternatives'].each do |link,args|
+    alternatives "python2_alternative_#{link}" do
+      link_name link
+      path args['path']
+      priority args['priority']
+      action :install
+    end
+  end unless node['python']['python2']['alternatives'].empty?
 
   # install pips
   node['python']['python2']['pips'].each do |pip|
@@ -58,8 +75,15 @@ end
 if node['python']['python3']['install']
   # install pip3
   bash 'install_pip3' do
-    code 'curl https://bootstrap.pypa.io/get-pip.py | python3'
+    code "curl https://bootstrap.pypa.io/get-pip.py | #{node['python']['python3']['bin']}"
     action :nothing
+  end
+
+  # install python3 prerequisites
+  if node['python']['python3']['prerequisites'].any?
+    bash 'install_python3_prerequisites' do
+      code "yum install -y #{node['python']['python3']['prerequisites'].join(' ')}"
+    end
   end
 
   # install python3
@@ -67,6 +91,16 @@ if node['python']['python3']['install']
     package_name node['python']['python3']['package']
     notifies :run, 'bash[install_pip3]', :immediately
   end
+
+  # set alternatives
+  node['python']['python3']['alternatives'].each do |link,args|
+    alternatives "python3_alternative_#{link}" do
+      link_name link
+      path args['path']
+      priority args['priority']
+      action :install
+    end
+  end unless node['python']['python3']['alternatives'].empty?
 
   # install pips
   node['python']['python3']['pips'].each do |pip|
