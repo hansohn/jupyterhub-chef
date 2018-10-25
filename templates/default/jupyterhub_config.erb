@@ -68,4 +68,5 @@ c.Authenticator.admin_users = set(<%= node['jupyterhub']['config']['jupyterhub_c
 # this config could also be put in
 # /etc/ipython/ipython_notebook_config.py
 c.Spawner.cmd = ['<%= node['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] %>']
+c.Spawner.args = ['<%== node['jupyterhub']['config']['jupyterhub_config']['Spawner.args'] %>']
 c.Spawner.notebook_dir = '<%= node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] %>'

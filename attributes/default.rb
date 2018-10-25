@@ -5,7 +5,10 @@ default['nodejs']['global_npms'] = ['npm', 'configurable-http-proxy']
 
 # python attributes
 default['python']['python2']['install'] = true
+default['python']['python2']['prerequisites'] = []
 default['python']['python2']['package'] = 'python-devel'
+default['python']['python2']['bin'] = 'python2'
+default['python']['python2']['alternatives'] = []
 default['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 default['python']['python2']['ipykernel']['install'] = false
 default['python']['python2']['ipykernel']['python_version'] = 'python2'
@@ -13,7 +16,13 @@ default['python']['python2']['ipykernel']['kernel_name'] = 'python2'
 default['python']['python2']['ipykernel']['kernel_displayname'] = 'Python 2'
 default['python']['python2']['ipykernel']['pips'] = ['ipykernel']
 default['python']['python3']['install'] = true
-default['python']['python3']['package'] = 'python34-devel'
+default['python']['python3']['prerequisites'] = ['epel-release']
+default['python']['python3']['package'] = 'python36-devel'
+default['python']['python3']['bin'] = 'python36'
+default['python']['python3']['alternatives']['python3']['path'] = '/usr/bin/python36' 
+default['python']['python3']['alternatives']['python3']['priority'] = 100 
+default['python']['python3']['alternatives']['pip3']['path'] = '/usr/local/bin/pip3' 
+default['python']['python3']['alternatives']['pip3']['priority'] = 100
 default['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 default['python']['python3']['ipykernel']['install'] = false
 default['python']['python3']['ipykernel']['python_version'] = 'python3'
@@ -24,7 +33,7 @@ default['python']['virtualenv']['env_dir'] = '/opt/virtualenv'
 
 # jupyterhub attributes
 default['jupyterhub']['install_from'] = 'python'
-default['jupyterhub']['install_version'] = '0.8.1'
+default['jupyterhub']['install_version'] = '0.9.4'
 default['jupyterhub']['git']['repo'] = 'https://github.com/jupyterhub/jupyterhub'
 default['jupyterhub']['python3']['pips'] = ['']
 default['jupyterhub']['addons']['pips'] = ['jupyterhub-ldap-authenticator']
@@ -76,6 +85,7 @@ default['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allow_ne
 default['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir'] = 'True'
 default['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir_cmd'] = ['mkhomedir_helper']
 default['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] = 'jupyterhub-singleuser'
+default['jupyterhub']['config']['jupyterhub_config']['Spawner.args'] = '--NotebookApp.allow_remote_access=True'
 default['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] = '~/jupyterhub'
 default['jupyterhub']['kernels']['python2']['type'] = 'python'
 default['jupyterhub']['kernels']['python2']['install'] = true
