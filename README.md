@@ -6,16 +6,25 @@ This cookbook installs [JupyterHub](https://github.com/jupyterhub/jupyterhub) a 
 
 ### Prerequsites
 
-By default `Python2` and `Python34` are installed from system package repos. A different Python package, or additional pips, can be specified for installation by overriding the following attributes.
+By default `Python2` and `Python36` are installed from system package repos. A different Python package, or additional pips, can be specified for installation by overriding the following attributes.
 
 ```ruby
 # python
-node['python']['python2']['install'] = true
-node['python']['python2']['package'] = 'python-devel'
-node['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
-node['python']['python3']['install'] = true
-node['python']['python3']['package'] = 'python34-devel'
-node['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
+default['python']['python2']['install'] = true
+default['python']['python2']['prerequisites'] = []
+default['python']['python2']['package'] = 'python-devel'
+default['python']['python2']['bin'] = 'python2'
+default['python']['python2']['alternatives'] = []
+default['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
+default['python']['python3']['install'] = true
+default['python']['python3']['prerequisites'] = ['epel-release']
+default['python']['python3']['package'] = 'python36-devel'
+default['python']['python3']['bin'] = 'python36'
+default['python']['python3']['alternatives']['python3']['path'] = '/usr/bin/python36'
+default['python']['python3']['alternatives']['python3']['priority'] = 100
+default['python']['python3']['alternatives']['pip3']['path'] = '/usr/local/bin/pip3'
+default['python']['python3']['alternatives']['pip3']['priority'] = 100
+default['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 ```
 
 The current `6.x` version of `NodeJS` is installed by default. A different version of NodeJS, or additional npms, can be specified for installation by overriding the following attributes.
@@ -29,12 +38,12 @@ node['node']['global_npms'] = ['npm', 'configurable-http-proxy']
 
 ### Configuration
 
-By default this cookbook installs JupyterHub version `0.8.1`, which at the time of this writing, is the current version. Various changes can be made to JupyterHub's configuration by overriding the following attributes.
+By default this cookbook installs JupyterHub version `0.9.4`, which at the time of this writing, is the current version. Various changes can be made to JupyterHub's configuration by overriding the following attributes.
 
 ```ruby
 # jupyterhub
 node['jupyterhub']['install_from'] = 'python'
-node['jupyterhub']['install_version'] = '0.8.1'
+node['jupyterhub']['install_version'] = ''0.9.4'
 node['jupyterhub']['config']['run_as'] = 'root'
 node['jupyterhub']['config']['pid_file'] = '/var/run/jupyter.pid'
 node['jupyterhub']['config']['app_dir'] = '/opt/jupyterhub'
@@ -56,6 +65,7 @@ node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = [
 node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = []
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_class'] = 'jupyterhub.auth.PAMAuthenticator'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] = 'jupyterhub-singleuser'
+default['jupyterhub']['config']['jupyterhub_config']['Spawner.args'] = '--NotebookApp.allow_remote_access=True'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] = '~/notebooks'
 ```
 
@@ -109,7 +119,7 @@ node['jupyterhub']['db']['name'] = 'jupyterhub_db_name'
 The [IPython](https://ipython.org/) kernel is the Python execution backend for Jupyter/JupyterHub. This cookbook includes 4 kernels by default, they are as follows:
 
 - python2: kernel running native python `2.7`
-- python3: kernel running native python `3.4`
+- python3: kernel running native python `3.6`
 - anaconda2: kernel running python `2.7.15` and default anaconda packages
 - anaconda3: kernel running python `3.6.5` and default anaconda packages
 
