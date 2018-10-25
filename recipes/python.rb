@@ -54,7 +54,7 @@ if node['python']['python2']['install']
   end
 
   # set alternatives
-  node['python']['python2']['alternatives'].each do |link,args|
+  node['python']['python2']['alternatives'].each do |link, args|
     alternatives "python2_alternative_#{link}" do
       link_name link
       path args['path']
@@ -93,7 +93,7 @@ if node['python']['python3']['install']
   end
 
   # set alternatives
-  node['python']['python3']['alternatives'].each do |link,args|
+  node['python']['python3']['alternatives'].each do |link, args|
     alternatives "python3_alternative_#{link}" do
       link_name link
       path args['path']
