@@ -6,6 +6,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - no new features in development at this time
 
+## [2.3.0](https://github.com/hansohn/jupyterhub-chef/compare/2.2.0...2.3.0) (Oct 25, 2018)
+
+FEATURES:
+
+- update python to 3.6
+- update jupyterhub to 0.9.4
+
 ## [2.2.0](https://github.com/hansohn/jupyterhub-chef/compare/2.1.0...2.2.0) (Jul 23, 2018)
 
 FEATURES:

@@ -1,7 +1,10 @@
 DEPENDENCIES
+  alternatives (~> 0.2.0)
   jupyterhub-chef
     path: .
     metadata: true
 
 GRAPH
-  jupyterhub-chef (2.2.0)
+  alternatives (0.2.0)
+  jupyterhub-chef (2.3.0)
+    alternatives (>= 0.0.0)
