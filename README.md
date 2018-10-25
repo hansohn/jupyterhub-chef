@@ -10,21 +10,21 @@ By default `Python2` and `Python36` are installed from system package repos. A d
 
 ```ruby
 # python
-default['python']['python2']['install'] = true
-default['python']['python2']['prerequisites'] = []
-default['python']['python2']['package'] = 'python-devel'
-default['python']['python2']['bin'] = 'python2'
-default['python']['python2']['alternatives'] = []
-default['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
-default['python']['python3']['install'] = true
-default['python']['python3']['prerequisites'] = ['epel-release']
-default['python']['python3']['package'] = 'python36-devel'
-default['python']['python3']['bin'] = 'python36'
-default['python']['python3']['alternatives']['python3']['path'] = '/usr/bin/python36'
-default['python']['python3']['alternatives']['python3']['priority'] = 100
-default['python']['python3']['alternatives']['pip3']['path'] = '/usr/local/bin/pip3'
-default['python']['python3']['alternatives']['pip3']['priority'] = 100
-default['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
+node['python']['python2']['install'] = true
+node['python']['python2']['prerequisites'] = []
+node['python']['python2']['package'] = 'python-devel'
+node['python']['python2']['bin'] = 'python2'
+node['python']['python2']['alternatives'] = []
+node['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
+node['python']['python3']['install'] = true
+node['python']['python3']['prerequisites'] = ['epel-release']
+node['python']['python3']['package'] = 'python36-devel'
+node['python']['python3']['bin'] = 'python36'
+node['python']['python3']['alternatives']['python3']['path'] = '/usr/bin/python36'
+node['python']['python3']['alternatives']['python3']['priority'] = 100
+node['python']['python3']['alternatives']['pip3']['path'] = '/usr/local/bin/pip3'
+node['python']['python3']['alternatives']['pip3']['priority'] = 100
+node['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
 ```
 
 The current `6.x` version of `NodeJS` is installed by default. A different version of NodeJS, or additional npms, can be specified for installation by overriding the following attributes.
@@ -43,7 +43,7 @@ By default this cookbook installs JupyterHub version `0.9.4`, which at the time 
 ```ruby
 # jupyterhub
 node['jupyterhub']['install_from'] = 'python'
-node['jupyterhub']['install_version'] = ''0.9.4'
+node['jupyterhub']['install_version'] = '0.9.4'
 node['jupyterhub']['config']['run_as'] = 'root'
 node['jupyterhub']['config']['pid_file'] = '/var/run/jupyter.pid'
 node['jupyterhub']['config']['app_dir'] = '/opt/jupyterhub'
@@ -65,7 +65,7 @@ node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = [
 node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = []
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_class'] = 'jupyterhub.auth.PAMAuthenticator'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] = 'jupyterhub-singleuser'
-default['jupyterhub']['config']['jupyterhub_config']['Spawner.args'] = '--NotebookApp.allow_remote_access=True'
+node['jupyterhub']['config']['jupyterhub_config']['Spawner.args'] = '--NotebookApp.allow_remote_access=True'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] = '~/notebooks'
 ```
 
