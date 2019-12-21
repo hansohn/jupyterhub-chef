@@ -27,6 +27,5 @@
 # install jupyterhub
 include_recipe "#{cookbook_name}::jupyterhub_install"
 include_recipe "#{cookbook_name}::jupyterhub_config"
-include_recipe "#{cookbook_name}::jupyterhub_parallel"
+include_recipe "#{cookbook_name}::jupyterhub_addons"
 include_recipe "#{cookbook_name}::jupyterhub_service"
-include_recipe "#{cookbook_name}::jupyterhub_ipykernel"

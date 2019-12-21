@@ -1,4 +1,4 @@
-# # encoding: utf-8
+# encoding: utf-8
 
 # Inspec test for recipe jupyterhub-chef::anaconda_config
 
@@ -8,7 +8,7 @@
 control 'jupyterhub-chef::anaconda_config' do
   title 'Testing anaconda configuration'
 
-  describe bash('source /etc/profile.d/conda.sh && conda config --show channels') do
+  describe bash('source /etc/profile.d/anaconda.sh && conda config --show channels') do
     its('stdout') { should match /conda-forge/ }
   end
 end

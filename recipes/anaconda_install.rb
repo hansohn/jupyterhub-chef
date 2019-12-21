@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: jupyterhub-chef
+# Cookbook:: jupyterhub-chef
 # Recipe:: anaconda_install
 #
 # The MIT License (MIT)
@@ -48,12 +48,22 @@ link "symlink_#{node['anaconda']['config']['app_dir']}/current" do
   action :nothing
 end
 
-# set anaconda envs
-link 'set_anaconda_envs' do
-  target_file '/etc/profile.d/conda.sh'
-  to "#{node['anaconda']['config']['app_dir']}/current/etc/profile.d/conda.sh"
-  action :nothing
+# create anaconda profile script
+template 'create_anaconda_profile' do
+  source 'anaconda.sh.erb'
+  path '/etc/profile.d/anaconda.sh'
+  owner 'root'
+  group 'root'
+  mode '644'
+  action :create
 end
+
+# set anaconda envs
+# link 'set_anaconda_envs' do
+#   target_file '/etc/profile.d/conda.sh'
+#   to "#{node['anaconda']['config']['app_dir']}/current/etc/profile.d/conda.sh"
+#   action :nothing
+# end
 
 anaconda_source = -> { node['anaconda']['source'][node['anaconda']['version']]['url'] }
 anaconda_checksum = -> { node['anaconda']['source'][node['anaconda']['version']]['checksum'] }
@@ -67,5 +77,5 @@ remote_file 'download_anaconda' do
   action :create_if_missing
   notifies :run, 'bash[install_anaconda]', :immediately
   notifies :create, "link[symlink_#{node['anaconda']['config']['app_dir']}/current]", :immediately
-  notifies :create, 'link[set_anaconda_envs]', :immediately
+  notifies :create, 'template[create_anaconda_profile]', :immediately
 end

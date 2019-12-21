@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: jupyterhub-chef
+# Cookbook:: jupyterhub-chef
 # Recipe:: jupyterhub_install
 #
 # The MIT License (MIT)
@@ -24,7 +24,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-if node['jupyterhub']['config']['run_as'] != 'root'
+if node['jupyterhub']['setup']['run_as'] != 'root'
   # create jupyterhub group
   group 'create_jupyterhub_group' do
     group_name  node['jupyterhub']['group']['name']
@@ -43,16 +43,16 @@ if node['jupyterhub']['config']['run_as'] != 'root'
   end
 
   # create jupyterhub root app_dir
-  directory "create_#{node['jupyterhub']['config']['app_dir']}" do
-    path node['jupyterhub']['config']['app_dir']
+  directory "create_#{node['jupyterhub']['setup']['app_dir']}" do
+    path node['jupyterhub']['setup']['app_dir']
     owner node['jupyterhub']['user']['name']
     group node['jupyterhub']['group']['name']
     mode '0755'
   end
 else
   # create jupyterhub root app_dir
-  directory "create_#{node['jupyterhub']['config']['app_dir']}" do
-    path node['jupyterhub']['config']['app_dir']
+  directory "create_#{node['jupyterhub']['setup']['app_dir']}" do
+    path node['jupyterhub']['setup']['app_dir']
     owner 'root'
     group 'root'
     mode '0755'
@@ -78,15 +78,15 @@ when 'git'
       python3 -m pip install 'jupyter-client>=5.2.0'
       python3 -m pip install -r dev-requirements.txt -e .
     EOF
-    cwd "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['install_version']}"
+    cwd "#{node['jupyterhub']['setup']['app_dir']}/#{node['jupyterhub']['install_version']}"
     user 'root'
     action :nothing
   end
 
   # symlink jupyterhub
-  link "symlink_#{node['jupyterhub']['config']['app_dir']}/current" do
-    target_file "#{node['jupyterhub']['config']['app_dir']}/current"
-    to "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['install_version']}"
+  link "symlink_#{node['jupyterhub']['setup']['app_dir']}/current" do
+    target_file "#{node['jupyterhub']['setup']['app_dir']}/current"
+    to "#{node['jupyterhub']['setup']['app_dir']}/#{node['jupyterhub']['install_version']}"
     action :nothing
   end
 
@@ -94,9 +94,9 @@ when 'git'
   git 'download_jupyterhub' do
     repository node['jupyterhub']['git']['repo']
     revision node['jupyterhub']['install_version']
-    destination "#{node['jupyterhub']['config']['app_dir']}/#{node['jupyterhub']['install_version']}"
+    destination "#{node['jupyterhub']['setup']['app_dir']}/#{node['jupyterhub']['install_version']}"
     action :sync
     notifies :run, 'bash[install_jupyterhub]', :immediately
-    notifies :create, "link[symlink_#{node['jupyterhub']['config']['app_dir']}/current]", :immediately
+    notifies :create, "link[symlink_#{node['jupyterhub']['setup']['app_dir']}/current]", :immediately
   end
 end

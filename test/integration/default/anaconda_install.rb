@@ -1,4 +1,4 @@
-# # encoding: utf-8
+# encoding: utf-8
 
 # Inspec test for recipe jupyterhub-chef::anaconda_install
 
@@ -20,23 +20,19 @@ control 'jupyterhub-chef::anaconda_install' do
     its('group') { should eq 'root' }
   end
 
-  describe file('/opt/anaconda/downloads/Anaconda3-5.2.0-Linux-x86_64.sh') do
+  describe file('/opt/anaconda/downloads/Anaconda3-2019.10-Linux-x86_64.sh') do
     it { should be_file }
     its('owner') { should eq 'root' }
     its('group') { should eq 'root' }
   end
 
-  describe file('/opt/anaconda/Anaconda3-5.2.0') do
+  describe file('/opt/anaconda/Anaconda3-2019.10') do
     it { should be_directory }
     its('owner') { should eq 'root' }
     its('group') { should eq 'root' }
   end
 
   describe file('/opt/anaconda/current') do
-    it { should be_symlink }
-  end
-
-  describe file('/etc/profile.d/conda.sh') do
     it { should be_symlink }
   end
 end
