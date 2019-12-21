@@ -37,7 +37,7 @@ end
 # install anaconda
 bash 'install_anaconda' do
   code "bash #{node['anaconda']['config']['app_dir']}/downloads/#{node['anaconda']['version']}-Linux-x86_64.sh -b -p #{node['anaconda']['config']['app_dir']}/#{node['anaconda']['version']}"
-  only_if { File.exist?("#{node['anaconda']['config']['app_dir']}/downloads/#{node['anaconda']['version']}-Linux-x86_64.sh") }
+  only_if { ::File.exist?("#{node['anaconda']['config']['app_dir']}/downloads/#{node['anaconda']['version']}-Linux-x86_64.sh") }
   action :nothing
 end
 
