@@ -1,6 +1,5 @@
-#
 # Cookbook:: jupyterhub-chef
-# Spec:: default
+# Recipe:: python_virtualenv
 #
 # The MIT License (MIT)
 #
@@ -24,26 +23,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'spec_helper'
+# install virtualenv
+bash 'python_pip_install_virtualenv' do
+  code 'python -m pip install --upgrade virtualenv'
+end unless node['python']['virtualenvs'].empty?
 
-describe 'jupyterhub-chef::anaconda_install' do
-  context 'When all attributes are default, on Ubuntu 18.04' do
-    # for a complete list of available platforms and versions see:
-    # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
-    platform 'ubuntu', '18.04'
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
+# create virtualenv(s)
+node['python']['virtualenvs'].each do |name, config|
+  directory "virtualenv_#{name}_#{config['dest_dir']}" do
+    path config['dest_dir']
+    recursive true
+    action :create
   end
 
-  context 'When all attributes are default, on CentOS 7' do
-    # for a complete list of available platforms and versions see:
-    # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
-    platform 'centos', '7'
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
+  bash "virtualenv_create_#{name}" do
+    code <<-EOH
+        if [ ! -d #{config['dest_dir']}/#{name}/bin ]; then
+          virtualenv -p #{config['python']} #{config['dest_dir']}/#{name}
+        fi
+        source #{config['dest_dir']}/#{name}/bin/activate
+        python -m pip install #{config['pips'].join(' ')}
+        deactivate
+    EOH
   end
 end

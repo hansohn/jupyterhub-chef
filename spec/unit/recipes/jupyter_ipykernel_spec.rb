@@ -1,10 +1,10 @@
 #
 # Cookbook:: jupyterhub-chef
-# Spec:: default
+# Spec:: jupyter_ipykernel
 #
 # The MIT License (MIT)
 #
-# Copyright:: 2018, Ryan Hansohn
+# Copyright:: 2019, Ryan Hansohn
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 
 require 'spec_helper'
 
-describe 'jupyterhub-chef::anaconda_install' do
+describe 'jupyterhub-chef::jupyter_ipykernel' do
   context 'When all attributes are default, on Ubuntu 18.04' do
     # for a complete list of available platforms and versions see:
     # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md

@@ -3,21 +3,21 @@ Description=Jupyterhub
 After=syslog.target network.target
 
 [Service]
-User=<%= node['jupyterhub']['config']['run_as'] %>
+User=<%= node['jupyterhub']['setup']['run_as'] %>
 EnvironmentFile=-/etc/sysconfig/jupyterhub
-PIDFile=<%= node['jupyterhub']['config']['pid_file'] %>
-<% if node['jupyterhub']['config']['run_as'] != 'root' -%>
-<% if node['jupyterhub']['config']['enable_ssl'] -%>
-ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['config']['app_dir'] %>/current/jupyterhub_config.py
+PIDFile=<%= node['jupyterhub']['setup']['pid_file'] %>
+<% if node['jupyterhub']['setup']['run_as'] != 'root' -%>
+<% if node['jupyterhub']['setup']['enable_ssl'] -%>
+ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['setup']['app_dir'] %>/current/jupyterhub_config.py
 <% else %>
-ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['config']['app_dir'] %>/current/jupyterhub_config.py --no-ssl
+ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['setup']['app_dir'] %>/current/jupyterhub_config.py --no-ssl
 <% end -%>
-WorkingDirectory=<%= node['jupyterhub']['config']['app_dir'] %>/current
+WorkingDirectory=<%= node['jupyterhub']['setup']['app_dir'] %>/current
 <% else -%>
-<% if node['jupyterhub']['config']['enable_ssl'] -%>
-ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_config.py
+<% if node['jupyterhub']['setup']['enable_ssl'] -%>
+ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['setup']['runtime_dir'] %>/jupyterhub_config.py
 <% else %>
-ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_config.py --no-ssl
+ExecStart=/usr/local/bin/jupyterhub -f <%= node['jupyterhub']['setup']['runtime_dir'] %>/jupyterhub_config.py --no-ssl
 <% end -%>
 <% end -%>
 

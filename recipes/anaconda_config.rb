@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: jupyterhub-chef
+# Cookbook:: jupyterhub-chef
 # Recipe:: anaconda_config
 #
 # The MIT License (MIT)

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: jupyterhub-chef
+# Cookbook:: jupyterhub-chef
 # Recipe:: jupyterhub_service
 #
 # The MIT License (MIT)

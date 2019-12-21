@@ -3,8 +3,15 @@ DEPENDENCIES
   jupyterhub-chef
     path: .
     metadata: true
+  python-chef
+    git: https://github.com/hansohn/python-chef.git
+    revision: 7ec7b13ab8fa2563e4ba47d98d41d27e37eb7da5
+  yum-epel
 
 GRAPH
   alternatives (0.2.0)
-  jupyterhub-chef (2.3.0)
+  jupyterhub-chef (3.0.0)
     alternatives (>= 0.0.0)
+    python-chef (>= 0.0.0)
+  python-chef (0.2.2)
+  yum-epel (3.3.0)

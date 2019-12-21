@@ -3,11 +3,11 @@
 c = get_config()
 
 ## File to write PID Useful for daemonizing jupyterhub.
-c.JupyterHub.pid_file = '<%= node['jupyterhub']['config']['pid_file'] %>'
+c.JupyterHub.pid_file = '<%= node['jupyterhub']['setup']['pid_file'] %>'
 
 ## The public facing network settings of the whole application (the proxy)
 c.JupyterHub.ip = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ip'] %>'
-<% if node['jupyterhub']['config']['enable_ssl'] -%>
+<% if node['jupyterhub']['setup']['enable_ssl'] -%>
 c.JupyterHub.port = <%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_port'] %>
 c.JupyterHub.ssl_key = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_key'] %>'
 c.JupyterHub.ssl_cert = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_cert'] %>'
@@ -24,21 +24,21 @@ c.JupyterHub.hub_ip = '<%= node['jupyterhub']['config']['jupyterhub_config']['Ju
 c.JupyterHub.hub_port = <%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.hub_port'] %>
 
 # put the JupyterHub cookie secret and state db
-# in <%= node['jupyterhub']['config']['runtime_dir'] %>
-c.JupyterHub.cookie_secret_file = '<%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub_cookie_secret'
+# in <%= node['jupyterhub']['setup']['runtime_dir'] %>
+c.JupyterHub.cookie_secret_file = '<%= node['jupyterhub']['setup']['runtime_dir'] %>/jupyterhub_cookie_secret'
 
 # specify db connection
 <% if defined?(node['jupyterhub']['db']['type']) and node['jupyterhub']['db']['type'] == 'postgresql' -%>
 c.JupyterHub.db_url = 'postgresql://<%= node['jupyterhub']['db']['user'] %>:<%= node['jupyterhub']['db']['pass'] %>@<%= node['jupyterhub']['db']['host'] %>:<%= node['jupyterhub']['db']['port'] %>/<%= node['jupyterhub']['db']['name'] %>'
 <% else -%>
-c.JupyterHub.db_url = '<%= node['jupyterhub']['config']['runtime_dir'] %>/jupyterhub.sqlite'
+c.JupyterHub.db_url = '<%= node['jupyterhub']['setup']['runtime_dir'] %>/jupyterhub.sqlite'
 # or `--db=/path/to/jupyterhub.sqlite` on the command-line
 <% end -%>
 
 # put the log file in /var/log
-c.JupyterHub.extra_log_file = '<%= node['jupyterhub']['config']['log_dir'] %>/jupyterhub.log'
+c.JupyterHub.extra_log_file = '<%= node['jupyterhub']['setup']['log_dir'] %>/jupyterhub.log'
 
-<% if node['jupyterhub']['config']['enable_ldap'] -%>
+<% if node['jupyterhub']['setup']['enable_ldap'] -%>
 # use LDAP Authenticator for user authentication
 c.JupyterHub.authenticator_class = '<%= node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_ldap_class'] %>'
 

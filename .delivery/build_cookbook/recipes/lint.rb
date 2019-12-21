@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: build_cookbook
+# Cookbook:: build_cookbook
 # Recipe:: lint
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.

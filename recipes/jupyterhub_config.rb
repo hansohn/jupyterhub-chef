@@ -1,5 +1,4 @@
-
-# Cookbook Name:: jupyterhub-chef
+# Cookbook:: jupyterhub-chef
 # Recipe:: jupyterhub_config
 #
 # The MIT License (MIT)
@@ -29,7 +28,7 @@ package ['openssl']
 
 # create jupyterhub log dir
 directory 'create_log_dir' do
-  path node['jupyterhub']['config']['log_dir']
+  path node['jupyterhub']['setup']['log_dir']
   owner 'root'
   group 'root'
   mode '0644'
@@ -38,7 +37,7 @@ end
 
 # create jupyterhub runtime dir
 directory 'create_runtime_dir' do
-  path node['jupyterhub']['config']['runtime_dir']
+  path node['jupyterhub']['setup']['runtime_dir']
   owner 'root'
   group 'root'
   mode '0644'
@@ -47,12 +46,12 @@ end
 
 # create jupyterhub cookie secret
 bash 'inject_cookie_secret' do
-  code "openssl rand -hex 32 > #{node['jupyterhub']['config']['runtime_dir']}/jupyterhub_cookie_secret"
+  code "openssl rand -hex 32 > #{node['jupyterhub']['setup']['runtime_dir']}/jupyterhub_cookie_secret"
   action :nothing
 end
 
 file 'create_cookie_secret_file' do
-  path "#{node['jupyterhub']['config']['runtime_dir']}/jupyterhub_cookie_secret"
+  path "#{node['jupyterhub']['setup']['runtime_dir']}/jupyterhub_cookie_secret"
   owner 'root'
   group 'root'
   mode '0600'
@@ -61,9 +60,9 @@ file 'create_cookie_secret_file' do
 end
 
 # create jupyterhub config file
-if node['jupyterhub']['config']['run_as'] != 'root'
+if node['jupyterhub']['setup']['run_as'] != 'root'
   template 'create_jupyterhub_config' do
-    path "#{node['jupyterhub']['config']['app_dir']}/current/jupyterhub_config.py"
+    path "#{node['jupyterhub']['setup']['app_dir']}/current/jupyterhub_config.py"
     source 'jupyterhub_config.erb'
     owner node['jupyterhub']['user']['name']
     group node['jupyterhub']['group']['name']
@@ -72,7 +71,7 @@ if node['jupyterhub']['config']['run_as'] != 'root'
   end
 else
   template 'create_jupyterhub_config' do
-    path "#{node['jupyterhub']['config']['runtime_dir']}/jupyterhub_config.py"
+    path "#{node['jupyterhub']['setup']['runtime_dir']}/jupyterhub_config.py"
     source 'jupyterhub_config.erb'
     owner 'root'
     group 'root'

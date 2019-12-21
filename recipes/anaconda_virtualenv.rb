@@ -1,10 +1,10 @@
 #
 # Cookbook:: jupyterhub-chef
-# Spec:: default
+# Recipe:: anaconda_virtualenv
 #
 # The MIT License (MIT)
 #
-# Copyright:: 2018, Ryan Hansohn
+# Copyright:: 2019, Ryan Hansohn
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'spec_helper'
-
-describe 'jupyterhub-chef::anaconda_install' do
-  context 'When all attributes are default, on Ubuntu 18.04' do
-    # for a complete list of available platforms and versions see:
-    # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
-    platform 'ubuntu', '18.04'
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
+# anaconda create virtualenv(s)
+if node['anaconda'].attribute?('virtualenvs')
+  node['anaconda']['virtualenvs'].each do |name, params|
+    bash "anaconda_create_virtualenv_#{name}" do
+      code <<-EOF
+        source /etc/profile.d/anaconda.sh
+        if [ ! -d #{node['anaconda']['config']['app_dir']}/current/envs/#{name} ]; then
+          conda create -n #{name} python=#{params['python']} -y
+        fi
+        source activate #{name}
+        conda install --name #{name} #{params['condas'].join(' ')} -y
+        python -m pip install #{params['pips'].join(' ')} -y
+        conda deactivate
+      EOF
     end
-  end
-
-  context 'When all attributes are default, on CentOS 7' do
-    # for a complete list of available platforms and versions see:
-    # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
-    platform 'centos', '7'
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
-  end
+  end unless node['anaconda']['virtualenvs'].empty?
 end

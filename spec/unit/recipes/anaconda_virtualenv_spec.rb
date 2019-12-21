@@ -1,10 +1,10 @@
 #
-# Cookbook Name:: jupyterhub-chef
-# Recipe:: jupyterhub_parallel
+# Cookbook:: jupyterhub-chef
+# Spec:: anaconda_virtualenv
 #
 # The MIT License (MIT)
 #
-# Copyright:: 2018, Ryan Hansohn
+# Copyright:: 2019, Ryan Hansohn
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# enable ipython clusters tab in jupyterhub
-if node['jupyterhub']['config']['allow_parallel_computing']
-  bash 'jupyterhub_enable_parallel_computing' do
-    code <<-EOF
-      if /bin/grep -qi ipyparallel <(/bin/pip3 list --format=columns); then
-        /bin/ipcluster nbextension enable
-        /bin/jupyter nbextension install --sys-prefix --py ipyparallel
-        /bin/jupyter nbextension enable --sys-prefix --py ipyparallel
-        /bin/jupyter serverextension enable --sys-prefix --py ipyparallel
-      fi
-    EOF
+require 'spec_helper'
+
+describe 'jupyterhub-chef::anaconda_virtualenv' do
+  context 'When all attributes are default, on Ubuntu 18.04' do
+    # for a complete list of available platforms and versions see:
+    # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
+    platform 'ubuntu', '18.04'
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
+  context 'When all attributes are default, on CentOS 7' do
+    # for a complete list of available platforms and versions see:
+    # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
+    platform 'centos', '7'
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
   end
 end

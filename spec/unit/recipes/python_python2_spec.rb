@@ -1,6 +1,6 @@
 #
 # Cookbook:: jupyterhub-chef
-# Spec:: default
+# Spec:: python_python2
 #
 # The MIT License (MIT)
 #
@@ -26,7 +26,7 @@
 
 require 'spec_helper'
 
-describe 'jupyterhub-chef::anaconda_install' do
+describe 'jupyterhub-chef::python_python2' do
   context 'When all attributes are default, on Ubuntu 18.04' do
     # for a complete list of available platforms and versions see:
     # https://github.com/chefspec/fauxhai/blob/master/PLATFORMS.md
