@@ -11,4 +11,3 @@ control 'jupyterhub-chef::jupyter_contrib_nbextensions' do
     its('exit_status') { should eq 0 }
   end
 end
-

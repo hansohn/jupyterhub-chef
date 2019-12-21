@@ -7,6 +7,12 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
+# Cop supports --auto-correct.
+Lint/PercentStringArray:
+  Exclude:
+    - 'attributes/default.rb'
+
+# Offense count: 1
 # Configuration parameters: CountBlocks.
 Metrics/BlockNesting:
   Max: 4
