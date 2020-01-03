@@ -74,7 +74,67 @@ default['python'] = {
   },
 }
 
-# jupyter
+# anaconda attributes
+default['anaconda'] = {
+  'version' => 'Anaconda3-2019.10',
+  'source' => {
+    'Anaconda2-5.1.0' => {
+      'url' => 'https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh',
+      'checksum' => '5f26ee92860d1dffdcd20910ff2cf75572c39d2892d365f4e867a611cca2af5b',
+    },
+    'Anaconda2-5.2.0' => {
+      'url' => 'https://repo.continuum.io/archive/Anaconda2-5.2.0-Linux-x86_64.sh',
+      'checksum' => 'cb0d7a08b0e2cec4372033d3269979b4e72e2353ffd1444f57cb38bc9621219f',
+    },
+    'Anaconda3-5.1.0' => {
+      'url' => 'https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh',
+      'checksum' => '7e6785caad25e33930bc03fac4994a434a21bc8401817b7efa28f53619fa9c29',
+    },
+    'Anaconda3-5.2.0' => {
+      'url' => 'https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh',
+      'checksum' => '09f53738b0cd3bb96f5b1bac488e5528df9906be2480fe61df40e0e0d19e3d48',
+    },
+    'Anaconda3-2018.12' => {
+      'url' => 'https://repo.continuum.io/archive/Anaconda3-2018.12-Linux-x86_64.sh',
+      'checksum' => '1019d0857e5865f8a6861eaf15bfe535b87e92b72ce4f531000dc672be7fce00',
+    },
+    'Anaconda3-2019.10' => {
+      'url' => 'https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh',
+      'checksum' => '46d762284d252e51cd58a8ca6c8adc9da2eadc82c342927b2f66ed011d1d8b53',
+    },
+  },
+  'config' => {
+    'app_dir' => '/opt/anaconda',
+    'channels' => {
+      'add' => %w(conda-forge),
+      'remove' => %w(),
+    },
+  },
+  'virtualenvs' => {
+    'anaconda2' => {
+      'python' => '2.7.15',
+      'condas' => %w(
+        numpy
+        pandas
+      ),
+      'pips' => %w(
+        ipykernel
+      ),
+    },
+    'anaconda3' => {
+      'python_version' => '3.6.5',
+      'condas' => %w(
+        numpy
+        pandas
+      ),
+      'pips' => %w(
+        ipykernel
+      ),
+    },
+  },
+}
+
+# jupyter attributes
 default['jupyter'] = {
   'setup' => {
     'allow_parallel_computing' => true,
@@ -200,66 +260,6 @@ default['jupyterhub'] = {
       'Spawner.cmd' => 'jupyterhub-singleuser',
       'Spawner.args' => '--NotebookApp.allow_remote_access=True',
       'Spawner.notebook_dir' => '~/jupyterhub',
-    },
-  },
-}
-
-# anaconda attributes
-default['anaconda'] = {
-  'version' => 'Anaconda3-2019.10',
-  'source' => {
-    'Anaconda2-5.1.0' => {
-      'url' => 'https://repo.continuum.io/archive/Anaconda2-5.1.0-Linux-x86_64.sh',
-      'checksum' => '5f26ee92860d1dffdcd20910ff2cf75572c39d2892d365f4e867a611cca2af5b',
-    },
-    'Anaconda2-5.2.0' => {
-      'url' => 'https://repo.continuum.io/archive/Anaconda2-5.2.0-Linux-x86_64.sh',
-      'checksum' => 'cb0d7a08b0e2cec4372033d3269979b4e72e2353ffd1444f57cb38bc9621219f',
-    },
-    'Anaconda3-5.1.0' => {
-      'url' => 'https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh',
-      'checksum' => '7e6785caad25e33930bc03fac4994a434a21bc8401817b7efa28f53619fa9c29',
-    },
-    'Anaconda3-5.2.0' => {
-      'url' => 'https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh',
-      'checksum' => '09f53738b0cd3bb96f5b1bac488e5528df9906be2480fe61df40e0e0d19e3d48',
-    },
-    'Anaconda3-2018.12' => {
-      'url' => 'https://repo.continuum.io/archive/Anaconda3-2018.12-Linux-x86_64.sh',
-      'checksum' => '1019d0857e5865f8a6861eaf15bfe535b87e92b72ce4f531000dc672be7fce00',
-    },
-    'Anaconda3-2019.10' => {
-      'url' => 'https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh',
-      'checksum' => '46d762284d252e51cd58a8ca6c8adc9da2eadc82c342927b2f66ed011d1d8b53',
-    },
-  },
-  'config' => {
-    'app_dir' => '/opt/anaconda',
-    'channels' => {
-      'add' => %w(conda-forge),
-      'remove' => %w(),
-    },
-  },
-  'virtualenvs' => {
-    'anaconda2' => {
-      'python' => '2.7.15',
-      'condas' => %w(
-        numpy
-        pandas
-      ),
-      'pips' => %w(
-        ipykernel
-      ),
-    },
-    'anaconda3' => {
-      'python_version' => '3.6.5',
-      'condas' => %w(
-        numpy
-        pandas
-      ),
-      'pips' => %w(
-        ipykernel
-      ),
     },
   },
 }
