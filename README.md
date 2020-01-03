@@ -10,30 +10,23 @@ By default `Python2` and `Python36` are installed from system package repos. A d
 
 ```ruby
 # python
-node['python']['python2']['install'] = true
-node['python']['python2']['prerequisites'] = []
-node['python']['python2']['package'] = 'python-devel'
-node['python']['python2']['bin'] = 'python2'
-node['python']['python2']['alternatives'] = []
-node['python']['python2']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
-node['python']['python3']['install'] = true
-node['python']['python3']['prerequisites'] = ['epel-release']
-node['python']['python3']['package'] = 'python36-devel'
-node['python']['python3']['bin'] = 'python36'
-node['python']['python3']['alternatives']['python3']['path'] = '/usr/bin/python36'
-node['python']['python3']['alternatives']['python3']['priority'] = 100
-node['python']['python3']['alternatives']['pip3']['path'] = '/usr/local/bin/pip3'
-node['python']['python3']['alternatives']['pip3']['priority'] = 100
-node['python']['python3']['pips'] = ['pip', 'setuptools', 'wheel', 'virtualenv', 'jupyter', 'py4j', 'ipyparallel']
+node['python']['python2']['packages'] = %w(python-devel python2-pip python-setuptools)
+node['python']['python2']['bin'] = '/bin/python2'
+node['python']['python2']'pip_bin'] = '/bin/pip2'
+node['python']['python2']['pips'] = %w()
+node['python']['python3']['packages'] = %w(python3-devel python3-pip python3-setuptools)
+node['python']['python3']['bin'] = '/bin/python3.6'
+node['python']['python3']'pip_bin'] = '/bin/pip3.6'
+node['python']['python3']['pips'] = %w('notebook<6' jupyter py4j ipyparallel)
 ```
 
 The current `6.x` version of `NodeJS` is installed by default. A different version of NodeJS, or additional npms, can be specified for installation by overriding the following attributes.
 
 ```ruby
 # node
-node['node']['version'] = '6.x'
-node['node']['npms'] = []
-node['node']['global_npms'] = ['npm', 'configurable-http-proxy']
+node['nodejs']['version'] = '6.x'
+node['nodejs']['npms'] = %w()
+node['nodejs']['global_npms'] = %w(npm configurable-http-proxy)
 ```
 
 ### Configuration
@@ -43,15 +36,15 @@ By default this cookbook installs JupyterHub version `0.9.4`, which at the time 
 ```ruby
 # jupyterhub
 node['jupyterhub']['install_from'] = 'python'
-node['jupyterhub']['install_version'] = '0.9.4'
-node['jupyterhub']['config']['run_as'] = 'root'
-node['jupyterhub']['config']['pid_file'] = '/var/run/jupyter.pid'
-node['jupyterhub']['config']['app_dir'] = '/opt/jupyterhub'
-node['jupyterhub']['config']['runtime_dir'] = '/srv/jupyterhub'
-node['jupyterhub']['config']['log_dir'] = '/var/log/jupyterhub'
-node['jupyterhub']['config']['allow_parallel_computing'] = true
-node['jupyterhub']['config']['enable_ssl'] = false
-node['jupyterhub']['config']['enable_ldap'] = false
+node['jupyterhub']['install_version'] = '0.9.6'
+node['jupyterhub']['setup']['run_as'] = 'root'
+node['jupyterhub']['setup']['pid_file'] = '/var/run/jupyter.pid'
+node['jupyterhub']['setup']['app_dir'] = '/opt/jupyterhub'
+node['jupyterhub']['setup']['runtime_dir'] = '/srv/jupyterhub'
+node['jupyterhub']['setup']['log_dir'] = '/var/log/jupyterhub'
+node['jupyterhub']['setup']['enable_ssl'] = false
+node['jupyterhub']['setup']['enable_ldap'] = false
+node['jupyterhub']['config']['jupyterhub_config'][
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ip'] = ''
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.port'] = '8000'
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_port'] = '8443'
@@ -61,12 +54,12 @@ node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_ip'] = '
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.proxy_api_port'] = '8001'
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_cert'] = '/etc/ssl/certs/jupyterhub.crt'
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.ssl_key'] = '/etc/ssl/private/jupyterhub.key'
-node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = []
-node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = []
+node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = %w()
+node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = %w()
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_class'] = 'jupyterhub.auth.PAMAuthenticator'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.cmd'] = 'jupyterhub-singleuser'
 node['jupyterhub']['config']['jupyterhub_config']['Spawner.args'] = '--NotebookApp.allow_remote_access=True'
-node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] = '~/notebooks'
+node['jupyterhub']['config']['jupyterhub_config']['Spawner.notebook_dir'] = '~/jupyterhub'
 ```
 
 ### Permissions
@@ -75,8 +68,8 @@ All system users with login rights will be allowed to log into JupyterHub. This 
 
 ```ruby
 # permissions
-node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = []
-node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = []
+node['jupyterhub']['config']['jupyterhub_config']['Authenticator.whitelist'] = %w()
+node['jupyterhub']['config']['jupyterhub_config']['Authenticator.admin_users'] = %w()
 ```
 
 ### LDAP Authentication
@@ -87,7 +80,7 @@ LDAP Authentication is not provided in Jupyterhub out of the box. This functiona
 # enable ldap
 node['jupyterhub']['config']['enable_ldap'] = true
 node['jupyterhub']['config']['jupyterhub_config']['JupyterHub.authenticator_ldap_class'] = 'ldapauthenticator.LDAPAuthenticator'
-node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.server_hosts'] = ['ldaps://ldap1.example.com:636', 'ldaps://ldap2.example.com:636']
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.server_hosts'] = %w(ldaps://ldap1.example.com:636 ldaps://ldap2.example.com:636)
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.bind_user_dn'] = 'uid=imauser,cn=users,cn=accounts,dc=example,dc=com'
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.bind_user_password'] = 'imapassword'
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_search_base'] = 'cn=users,cn=accounts,dc=example,dc=com'
@@ -95,10 +88,10 @@ node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_search
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.user_membership_attribute'] = 'memberOf'
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.group_search_base'] = 'cn=groups,cn=accounts,dc=example,dc=com'
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.group_search_filter'] = '(&(objectClass=ipausergroup)(memberOf={group}))'
-node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allowed_groups'] = ['cn=jupyterhub-users,cn=groups,cn=accounts,dc=example,dc=com']
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allowed_groups'] = %w(cn=jupyterhub-users,cn=groups,cn=accounts,dc=example,dc=com)
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.allow_nested_groups'] = 'True'
 node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir'] = 'True'
-node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir_cmd'] = ['mkhomedir_helper']
+node['jupyterhub']['config']['jupyterhub_config']['LDAPAuthenticator.create_user_home_dir_cmd'] = %w(mkhomedir_helper)
 ```
 
 ### PostgreSQL Database
@@ -126,52 +119,52 @@ The [IPython](https://ipython.org/) kernel is the Python execution backend for J
 These kernels can be enabled/disabled as desired. The kernel name, python version, and included pips/condas can also be changed by modifying the following attributes.
 
 ```ruby
-# python2 kernel
-node['jupyterhub']['kernels']['python2']['type'] = 'python'
-node['jupyterhub']['kernels']['python2']['install'] = true
-node['jupyterhub']['kernels']['python2']['kernel_name'] = 'python2'
-node['jupyterhub']['kernels']['python2']['kernel_displayname'] = 'Python 2'
-node['jupyterhub']['kernels']['python2']['python_version'] = 'python2'
-node['jupyterhub']['kernels']['python2']['pips'] = ['ipykernel']
+# python
+node['python']['virtualenvs']['python2']['dest_dir'] = '/opt/python/virtualenv/python2'
+node['python']['virtualenvs']['python2']['python'] = '/bin/python2'
+node['python']['virtualenvs']['python2']['pips'] = %w(boto3 csvkit ipykernel Keras nose nose-parameterized pandas pyGPs requests tensorflow Theano)
+node['python']['virtualenvs']['python3']['dest_dir'] = '/opt/python/virtualenv/python3'
+node['python']['virtualenvs']['python3']['python'] = '/bin/python3.6'
+node['python']['virtualenvs']['python3']['pips'] = %w(boto3 csvkit ipykernel Keras nose nose-parameterized pandas pyGPs requests tensorflow Theano)
 
-# python3 kernel
-node['jupyterhub']['kernels']['python3']['type'] = 'python'
-node['jupyterhub']['kernels']['python3']['install'] = true
-node['jupyterhub']['kernels']['python3']['kernel_name'] = 'python3'
-node['jupyterhub']['kernels']['python3']['kernel_displayname'] = 'Python 3'
-node['jupyterhub']['kernels']['python3']['python_version'] = 'python3'
-node['jupyterhub']['kernels']['python3']['pips'] = ['ipykernel']
+# anaconda
+node['anaconda']['virtualenvs']['anaconda2']['python'] = '2.7.15'
+node['anaconda']['virtualenvs']['anaconda2']['condas'] = %w(numpy pandas)
+node['anaconda']['virtualenvs']['anaconda2']['pips'] = %w(ipykernel)
+node['anaconda']['virtualenvs']['anaconda3']['python'] = '3.6.5'
+node['anaconda']['virtualenvs']['anaconda3']['condas'] = %w(numpy pandas)
+node['anaconda']['virtualenvs']['anaconda3']['pips'] = %w(ipykernel)
 
-# anaconda2 kernel
-node['jupyterhub']['kernels']['anaconda2']['type'] = 'anaconda'
-node['jupyterhub']['kernels']['anaconda2']['install'] = true
-node['jupyterhub']['kernels']['anaconda2']['kernel_name'] = 'anaconda2'
-node['jupyterhub']['kernels']['anaconda2']['kernel_displayname'] = 'Anaconda 2'
-node['jupyterhub']['kernels']['anaconda2']['python_version'] = '2.7.15'
-node['jupyterhub']['kernels']['anaconda2']['pips'] = ['ipykernel']
-node['jupyterhub']['kernels']['anaconda2']['condas'] = []
-
-# anaconda3 kernel
-node['jupyterhub']['kernels']['anaconda3']['type'] = 'anaconda'
-node['jupyterhub']['kernels']['anaconda3']['install'] = true
-node['jupyterhub']['kernels']['anaconda3']['kernel_name'] = 'anaconda3'
-node['jupyterhub']['kernels']['anaconda3']['kernel_displayname'] = 'Anaconda 3'
-node['jupyterhub']['kernels']['anaconda3']['python_version'] = '3.6.5'
-node['jupyterhub']['kernels']['anaconda3']['pips'] = ['ipykernel']
-node['jupyterhub']['kernels']['anaconda3']['condas'] = []
+# jupyter kernels(s)
+node['jupyter']['kernels']['python2']['displayname'] = 'Python 2'
+node['jupyter']['kernels']['python2']['install'] = true
+node['jupyter']['kernels']['python2']['python_dist'] = 'python'
+node['jupyter']['kernels']['python2']['python_env'] = 'python2'
+node['jupyter']['kernels']['python3']['displayname'] = 'Python 3'
+node['jupyter']['kernels']['python3']['install'] = true
+node['jupyter']['kernels']['python3']['python_dist'] = 'python'
+node['jupyter']['kernels']['python3']['python_env'] = 'python3'
+node['jupyter']['kernels']['anaconda2']['displayname'] = 'Anaconda 2'
+node['jupyter']['kernels']['anaconda2']['install'] = true
+node['jupyter']['kernels']['anaconda2']['python_dist'] = 'anaconda'
+node['jupyter']['kernels']['anaconda2']['python_env'] = 'anaconda2'
+node['jupyter']['kernels']['anaconda3']['displayname'] = 'Anaconda 3'
+node['jupyter']['kernels']['anaconda3']['install'] = true
+node['jupyter']['kernels']['anaconda3']['python_dist'] = 'anaconda'
+node['jupyter']['kernels']['anaconda3']['python_env'] = 'anaconda3'
 ```
 
 To create your own custom kernel with a pinned version of python and specific included packages include the following in your attributes file. Replace `python-custom` with the desired name of your kernel.
 
 ```ruby
 # custom anaconda kernel
-node['jupyterhub']['kernels']['python-custom']['type'] = 'anaconda'
-node['jupyterhub']['kernels']['python-custom']['install'] = true
-node['jupyterhub']['kernels']['python-custom']['kernel_name'] = 'python-custom'
-node['jupyterhub']['kernels']['python-custom']['kernel_displayname'] = 'Python Custom'
-node['jupyterhub']['kernels']['python-custom']['python_version'] = '3.6.5'
-node['jupyterhub']['kernels']['python-custom']['pips'] = ['ipykernel', 'matplotlib', 'pandas', 'scikit-learn', 'tensorflow']
-node['jupyterhub']['kernels']['python-custom']['condas'] = []
+node['anaconda']['virtualenvs']['python-custom']['python'] = '3.6.5'
+node['anaconda']['virtualenvs']['python-custom']['condas'] = %w(numpy pandas)
+node['anaconda']['virtualenvs']['python-custom']['pips'] = %w(ipykernel matplotlib scikit-learn tensorflow)
+node['jupyter']['kernels']['python-custom']['displayname'] = 'Python Custom'
+node['jupyter']['kernels']['python-custom']['install'] = true
+node['jupyter']['kernels']['python-custom']['python_dist'] = 'anaconda'
+node['jupyter']['kernels']['python-custom']['python_env'] = 'python-custom'
 ```
 
 ### Usage
